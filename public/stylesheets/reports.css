@@ -1,0 +1,92 @@
+.label {
+    width:10%;
+    margin-block-start:5px;
+    margin-block-end:5px;
+}
+
+.label_subtotal {
+    width:70%;
+}
+
+.input {
+    width:90%;
+    margin-left:5%;
+    font-weight: bold;
+    margin-block-start:5px;
+    margin-block-end:5px;
+}
+
+.subtotal {
+    padding-left:18%;
+    width:90%;
+    margin-left:5%;
+    font-weight: bold;
+}
+
+
+.row_wrapper {
+    display:-webkit-box;
+    flexDirection: row;
+}
+
+.body_wrapper {
+    margin-left:5%;
+    width:auto;
+}
+
+.doc_wrapper {
+    margin-left:5%;
+    margin-top:5%;
+    width:auto;
+}
+
+.doc_header {
+    margin-block-start:5px;
+    margin-block-end:5px;
+}
+
+.td {
+    font-size: smaller;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+}
+
+.th {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    font-size: smaller;
+}
+
+
+@media print {
+    h3 { page-break-after: always }
+}
+
+@page {
+    size: auto;   /* auto is the initial value */
+    margin: 5px 5px;  /* this affects the margin in the printer settings */
+}
+.grid_data {
+    width: -webkit-fill-available;
+    border: 1px solid black;
+}
+
+.grid_head {
+    background-color:lightgray;
+    border: 1px solid black;
+}
+.group {
+    font-weight: bold;
+    border-top: 1px solid black;
+}
+.row_rigth {
+    text-align: right;
+}
+.margin_left {
+    margin-left: 150px;
+}
+
+.table {
+    border-spacing: 0px;
+    border: 1px solid black;
+}

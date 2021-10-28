@@ -1,0 +1,29 @@
+extends layout
+block content
+    link(rel='stylesheet', href='/stylesheets/login.css')
+    h1= 'KÜ'
+    h2= 'Sisselogimine'
+    br
+    p= 'Sissesta kasutaja nimi ja parool'
+    form(name="login-form", method="post")
+        div.loginForm
+            div.loginText
+                label.labelName Kasutaja nimi:
+                input(type="text" name='username' )
+            div.loginText
+                label.labelPassword Parool:
+                    input(type="password" name='password')
+            div.loginSubmit
+                input(type='submit', value='Sisse' class='loginSubmit')
+            br
+            div.registerSubmit
+                input(type='button',onClick="window.location.href='registreerimine'" value='Registreeri uuena kasutajana' class='registerSubmit')
+
+        label.labelErrorMessage #{errorMessage}
+    br
+    br
+    br
+    a(href="/help/login")
+        img(src='/images/icons/info.png')
+        span Abi
+

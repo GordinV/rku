@@ -1,0 +1,40 @@
+extends layout
+block content
+    link(rel='stylesheet', href='/stylesheets/registreerimine.css')
+    h1= 'KÜ'
+    h2= 'Registreerimine'
+    br
+    p= 'Sissesta oma andmed'
+    form(name="registreerimine-form", method="post")
+        div.form
+            div.text
+                label.label Teie kasutaja nimi:
+                input(type="text" name='username' required)
+            div.text
+                label.label Parool:
+                    input(type="password" name='password' required)
+            div.text
+                label.label Ees ja perekonna nimi:
+                    input(type="text" name='nimi' required)
+            div.text
+                label.label KÜ aadress:
+                    input(type="text" name='aadress' required)
+            div.text
+                label.label Teie email:
+                    input(type="text" name='email')
+            div.text
+                label.label Teie telefon:
+                    input(type="text" name='tel' required)
+
+            div.Submit
+                input(type='submit', value='Saada' class='submit')
+            br
+
+        label.labelErrorMessage #{errorMessage}
+    br
+    br
+    br
+    a(href="/help/registreerimine")
+        img(src='/images/icons/info.png')
+        span Abi
+

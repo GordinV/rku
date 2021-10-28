@@ -1,0 +1,106 @@
+<?xml version = "1.0" encoding="Windows-1252" standalone="yes"?>
+<VFPData>
+  <grid>
+    <sql>SELECT l.*, $2::INTEGER AS userId
+                    FROM cur_tunnus l
+                    WHERE (l.rekvId = $1 OR l.rekvid IS NULL)</sql>
+    <alias>curTunnus</alias>
+  </grid>
+  <select>
+    <sql>SELECT l.id,
+                     l.kood::VARCHAR(20)                     AS kood,
+                     l.nimetus::VARCHAR(254)                 AS nimetus,
+                     l.library::VARCHAR(20),
+                     l.muud,
+                     $2::INTEGER                             AS userid,
+                     l.rekvid                                AS rekvid,
+                     'TUNNUS'                                AS doc_type_id,
+                     (l.properties::JSONB -&gt;&gt; 'valid')::DATE AS valid
+              FROM libs.library l
+              WHERE l.library = 'TUNNUS'
+                AND l.id = $1</sql>
+    <sqlAsNew>select  
+                    $1::integer as id , 
+                    $2::integer as userid, 
+                    'TUNNUS' as doc_type_id,
+                    ''::varchar(20) as  kood,
+                    0::integer as rekvid,
+                    ''::varchar(254) as nimetus,
+                    'TUNNUS'::varchar(20) as library,
+                    null::date as valid,                    
+                    null::text as muud</sqlAsNew>
+    <query />
+    <multiple>false</multiple>
+    <alias>row</alias>
+  </select>
+  <select>
+    <sql>SELECT $1 AS rekv_id, *
+                  FROM jsonb_to_recordset(
+                               get_tunnus_kasutus($2::INTEGER, $3::DATE)
+                           ) AS x (error_message TEXT, error_code INTEGER)
+                  WHERE error_message IS NOT NULL
+            </sql>
+    <query />
+    <multiple>true</multiple>
+    <alias>validate_lib_usage</alias>
+    <not_initial_load>true</not_initial_load>
+  </select>
+  <selectAsLibs>
+    <sql>SELECT *
+                   FROM (
+                            SELECT 0                AS id,
+                                   ''::VARCHAR(20)  AS kood,
+                                   ''::VARCHAR(254) AS nimetus,
+                                   NULL::DATE       AS valid
+                            UNION
+                            SELECT id,
+                                   trim(kood)    AS kood,
+                                   trim(nimetus) AS name,
+                                   l.valid::DATE
+                            FROM cur_tunnus l
+                            WHERE rekvid = $1
+                        ) qry
+                   ORDER BY kood</sql>
+    <alias>selectAsLibs</alias>
+  </selectAsLibs>
+  <saveDoc>
+    <sql>select libs.sp_salvesta_library($1, $2, $3) as id</sql>
+    <alias>saveDoc</alias>
+  </saveDoc>
+  <deleteDoc>
+    <sql>SELECT error_code, result, error_message
+                FROM libs.sp_delete_library($1::INTEGER, $2::INTEGER)</sql>
+    <alias>deleteDoc</alias>
+  </deleteDoc>
+  <requiredFields>
+    <validate>kood,nimetus,library</validate>
+  </requiredFields>
+  <executeSql>
+    <sql></sql>
+    <alias></alias>
+  </executeSql>
+  <executeCommand>
+    <sql></sql>
+    <alias></alias>
+  </executeCommand>
+  <register>
+    <sql></sql>
+    <alias></alias>
+  </register>
+  <endProcess>
+    <sql />
+    <alias />
+  </endProcess>
+  <generateJournal>
+    <sql />
+    <alias />
+  </generateJournal>
+  <print>
+    <view>tunnus</view>
+    <params>id</params>
+  </print>
+  <print>
+    <view>tunnus</view>
+    <params>sqlWhere</params>
+  </print>
+</VFPData>

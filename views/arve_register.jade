@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+html(lang="et")
+extends report_header
+
+block content
+    style(type='text/css').
+        .grid_head {
+            background-color: lightgray;;
+        }
+
+        .doc_wrapper {
+            margin-left: 5%;
+            margin-top: 5%;
+            width: auto;
+        }
+
+        .grid_data {
+            width: 100%;
+            border: 1px solid lightgray;
+        }
+
+        .row_wrapper {
+            display: -webkit-box;
+            flexDirection: row;
+        }
+
+        .label {
+            width: 10%;
+        }
+
+        .input {
+            width: 90%;
+            margin-left: 5%;
+            font-weight: bold;
+        }
+
+        .label_subtotal {
+            width: 70%;
+        }
+
+
+    link(rel='stylesheet', href='/stylesheets/reports.css')
+    div.body_wrapper
+        h1 Arvete register
+
+        table.table.table-hover.grid_data
+            thead.grid_head
+                tr
+                    th Number
+                    th Kuupäev
+                    th Summa
+                    th Maksja
+                    th Tähtaeg
+                    th Jääk
+                    th Tasud
+                    th Teenuste saaja
+                    th Viitenumber
+
+            tbody
+                each arve in data
+                    tr
+                        td=arve.number
+                        td=arve.kpv
+                        td=arve.summa
+                        td=arve.asutus
+                        td=arve.tahtaeg
+                        td=arve.jaak
+                        td=arve.tasud
+                        td=arve.nimi
+                        td=arve.viitenr
+
+        - var total = 0
+        - var read = 0
+        - var volg = 0
+        each arve in data
+            - total += Number(arve.summa)
+            - read += 1
+            - volg += Number(arve.jaak)
+
+        div.row_wrapper
+            p.label_subtotal Kokku:
+            p.input #{`${Number(total).toFixed(2)}, Võlg kokku : ${Number(volg).toFixed(2)},  read kokku: ${read}`}

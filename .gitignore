@@ -1,0 +1,27 @@
+# Dependency directories
+/node_modules
+
+# Optional eslint cache
+.eslintcache
+
+# Output of 'npm pack'
+*.tgz
+.eslintrc.js
+.idea/workspace.xml
+npm-debug.log.2494880403
+.idea/dataSources.local.xml
+.idea/dataSources/
+
+# Pictures and icons
+/IcoMoon-Free-master
+
+#Temp files
+#/temp
+proc/
+#public/javascripts/raama.js
+
+#ssh
+routes/ssh
+
+#config/ default/json
+config/default.json

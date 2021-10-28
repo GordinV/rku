@@ -1,0 +1,10 @@
+ul {
+    display: inline-block;
+    width:100%;
+    list-style:none;
+
+}
+
+ul li.menu:hover {
+    background-color: lightblue;
+}
