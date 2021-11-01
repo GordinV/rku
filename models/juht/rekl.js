@@ -63,8 +63,8 @@ module.exports = {
                                     $1::INTEGER                               AS rekvid,
                                     $2::INTEGER                               AS userId,
                                     rekv.nimetus                              AS rekv,
-                                    d.lastupdate,
-                                    r.last_shown
+                                    d.lastupdate::date,
+                                    r.last_shown::date
                              FROM docs.doc d
                                       INNER JOIN docs.rekl r ON d.id = r.parentid
                                       INNER JOIN libs.asutus a ON a.id = r.asutusid

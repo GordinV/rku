@@ -24,7 +24,7 @@ class Index extends React.PureComponent {
 
     componentDidMount() {
 //        setInterval(this.fetchData(), 1000 * 60);
-        this.interval = setInterval(() => this.fetchData(), 30000);
+        this.interval = setInterval(() => this.fetchData(), 10000);
 
     }
 
@@ -37,6 +37,8 @@ class Index extends React.PureComponent {
             <div style={styles.frame}>
                 <br/>
                 {this.state.nimetus ?
+                    <a href={this.state.link} target="_blank" > {this.state.nimetus} </a>: null}
+{/*
                     <button
                         onClick={() => {
                             DocContext.link = this.state.link;
@@ -53,7 +55,8 @@ class Index extends React.PureComponent {
                         }>
                         {this.state.nimetus}
                     </button>
-                    : null}
+*/}
+
             </div>
         )
     };
