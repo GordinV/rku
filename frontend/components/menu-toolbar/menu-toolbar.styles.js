@@ -10,7 +10,13 @@ module.exports = {
     pageName: {
         fontWeight: 'bold',
         fontSize:'x-large'
-    }
+    },
+    selectKeel: {
+        margin: '5px',
+        display: 'flex',
+        width: '100px'
+    },
+
 
 };
 

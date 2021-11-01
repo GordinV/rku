@@ -35,28 +35,8 @@ class Index extends React.PureComponent {
     render() {
         return (
             <div style={styles.frame}>
-                <br/>
                 {this.state.nimetus ?
-                    <a href={this.state.link} target="_blank" > {this.state.nimetus} </a>: null}
-{/*
-                    <button
-                        onClick={() => {
-                            DocContext.link = this.state.link;
-                            const current = `/kasutaja`;
-                            this.props.history.replace({
-                                pathname: `/redirect`,
-                                state: {link: `${this.state.link}`}
-                            });
-                            setTimeout(() => {
-                                this.props.history.replace(current);
-                            }, 10000)
-                        }
-
-                        }>
-                        {this.state.nimetus}
-                    </button>
-*/}
-
+                    <a href={this.state.link} target="_blank"> {this.state.nimetus} </a> : null}
             </div>
         )
     };

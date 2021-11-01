@@ -4,6 +4,7 @@ const DocContext = {
     filter: {},
     libs: {},
     menu: [],
+    keel: 'EST',
     docTypeId: 'TAOTLUS_LOGIN',
     initFilter: (docTypeId) => {
         /**

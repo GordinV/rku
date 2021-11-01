@@ -375,15 +375,6 @@ class Arve extends React.PureComponent {
                     </div>
                     <div style={styles.docRow}>
                         <div style={styles.docColumn}>
-                            <Select title="Korr. konto"
-                                    name='konto'
-                                    data={self.libs['kontod']}
-                                    value={row.konto || ''}
-                                    ref='konto'
-                                    collId="kood"
-                                    onChange={self.handleGridRowChange}/>
-                        </div>
-                        <div style={styles.docColumn}>
                             <Select title="Tunnus:"
                                     name='tunnus'
                                     data={self.libs['tunnus']}
@@ -397,15 +388,6 @@ class Arve extends React.PureComponent {
                     </div>
                     <div style={styles.docRow}>
                         <div style={styles.docColumn}>
-                            <Select title="Tegevus:"
-                                    name='kood1'
-                                    data={self.libs['tegev']}
-                                    value={row.kood1 || ''}
-                                    ref='kood1'
-                                    collId="kood"
-                                    onChange={self.handleGridRowChange}/>
-                        </div>
-                        <div style={styles.docColumn}>
                             <Select title="Project:"
                                     name='proj'
                                     data={self.libs['project']}
@@ -415,30 +397,6 @@ class Arve extends React.PureComponent {
                                     onChange={self.handleGridRowChange}/>
                         </div>
 
-                    </div>
-                    <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
-
-                            <Select title="Allikas"
-                                    name='kood2'
-                                    data={self.libs['allikas']}
-                                    value={row.kood2 || ''}
-                                    ref='kood2'
-                                    collId="kood"
-                                    onChange={self.handleGridRowChange}/>
-                        </div>
-                    </div>
-                    <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
-
-                            <Select title="Eelarve"
-                                    name='kood5'
-                                    data={self.libs['artikkel']}
-                                    value={row.kood5 || ''}
-                                    ref='kood5'
-                                    collId="kood"
-                                    onChange={self.handleGridRowChange}/>
-                        </div>
                     </div>
                     <div style={styles.docRow}>
                         <TextArea title="Märkused"

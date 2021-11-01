@@ -12,6 +12,7 @@ const prepareSqlWhereFromFilter = require('./../../../libs/prepareSqlWhereFromFi
 const Const = require('./../../../config/constants');
 const Liimit = Const.RECORDS_LIMIT;
 const prepareData = require('./../../../libs/prepaireFilterData');
+const getTextValue = require('./../../../libs/getTextValue');
 
 
 const
@@ -555,7 +556,7 @@ class Documents extends React.Component {
                                title='Limiit:'
                                name='limit'
                                style={styles.limit}
-                               value={String(this.state.limit) || Liimit}
+                               value={getTextValue(String(this.state.limit) || Liimit, 2)}
                                readOnly={false}
                                onChange={this.handleInputChange}/>
 

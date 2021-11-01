@@ -12,6 +12,7 @@ const React = require('react'),
     BtnInfo = require('./../button-register/button-info/index.jsx'),
     StartMenu = require('./../start-menu/start-menu.jsx'),
     SelectRekv = require('./../select-rekv/index.jsx'),
+    Select = require('./../select/select.jsx'),
     BtnAccount = require('./../button-register/button-account/button-account.jsx');
 
 const style = require('./menu-toolbar.styles');
@@ -29,7 +30,8 @@ class MenuToolBar extends React.Component {
             startMenuValue: 'parentid',
             showStartMenu: false,
             isOpenRekvPage: false,
-            rekvId: props.rekvId ? props.rekvId : 1
+            rekvId: props.rekvId ? props.rekvId : 1,
+            keel: DocContext.keel
         };
 
 
@@ -38,6 +40,7 @@ class MenuToolBar extends React.Component {
         this.renderStartMenu = this.renderStartMenu.bind(this);
         this.startMenuClickHandler = this.startMenuClickHandler.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.btnAccountClick = this.btnAccountClick.bind(this);
         this.btnEditRekvClick = this.btnEditRekvClick.bind(this);
 
@@ -87,6 +90,7 @@ class MenuToolBar extends React.Component {
             asutus = userAccessList.find(row => {
                 return row.id == rekvId
             }).name;
+
         return (
             <div style={style['container']}>
                 <p style={style['pageName']}> {DocContext.pageName ? DocContext.pageName : ''} </p>
@@ -126,6 +130,18 @@ class MenuToolBar extends React.Component {
                               onClick={this.btnLoginClick}
                               show={toolbarParams['btnLogin'].show}
                               disabled={toolbarParams['btnLogin'].disabled}/>
+                    <select ref="select"
+                            style={style['selectKeel']}
+                            value={this.state.keel || 'Est'}
+                            id={'keel'}
+                            onChange={this.handleChangeSelect}>
+                        <option value={'Est'} key={'est'}
+                                ref={'Est'}> {'EST'} </option>
+                        <option value={'RU'} key={'RU'}
+                                ref={'RU'}> {'RU'} </option>
+                        <option value={'ING'} key={'ING'}
+                                ref={'ING'}> {'ING'} </option>
+                    </select>
                     <BtnInfo ref='btnInfo'
                              value={'Juhend'}
                              show={toolbarParams['btnInfo'].show}/>
@@ -134,6 +150,19 @@ class MenuToolBar extends React.Component {
 
             </div>
         );
+    }
+
+    handleChangeSelect(e) {
+        let fieldValue = e.target.value;
+
+        DocContext.keel = fieldValue;
+        this.setState({keel: fieldValue});
+        const current = window.location.pathname;
+        this.props.history.replace(`/reload`);
+        setTimeout(() => {
+            this.props.history.replace(current);
+        });
+
     }
 
     renderStartMenu() {
@@ -220,6 +249,7 @@ class MenuToolBar extends React.Component {
     }
 
     handleChange(inputName, inputValue) {
+
         const URL = '/newApi/changeAsutus';
         let rekvId = inputValue; // choose asutusId
 

@@ -4,7 +4,7 @@ const React = require('react');
 const PropTypes = require('prop-types');
 
 const styles = require('./button-register-styles');
-
+const getTextValue = require('./../../../libs/getTextValue');
 
 class Button extends React.PureComponent {
 // кнопка создания документа в регистрах
@@ -43,7 +43,6 @@ class Button extends React.PureComponent {
         let propStyle  = ('style' in this.props)? this.props.style: {},
             style = Object.assign({}, styles.button, propStyle, {visibility: visibility});
 
-
         return <button
             disabled={this.state.disabled}
             ref="button"
@@ -51,7 +50,7 @@ class Button extends React.PureComponent {
             onDoubleClick={this.handleClick}
             onClick={this.handleClick}>
             {this.props.children}
-            {this.props.value}
+            {getTextValue(this.props.value)}
         </button>
     }
 }

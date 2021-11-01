@@ -17,6 +17,7 @@ DocContext.module = 'juht';
 DocContext.pageName = 'Juhataja';
 DocContext.gridConfig = initData.docConfig;
 DocContext.menu = initData.menu ? initData.menu.data : [];
+DocContext.keel = 'EST';
 
 ReactDOM.hydrate(
     <BrowserRouter>
