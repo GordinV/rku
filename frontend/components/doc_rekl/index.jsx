@@ -77,7 +77,7 @@ class Index extends React.PureComponent {
             method: 'selectDocs',
             sortBy: [{column: 'last_shown', direction: 'asc'}], // сортировка
             limit: 1, // row limit in query
-            sqlWhere: 'where (alg_kpv::date <= current_date or lopp_kpv::date >= current_date) AND docs.update_last_rekl(id) = 1', // динамический фильтр грида
+            sqlWhere: 'where (format_date(alg_kpv)::date <= current_date or format_date(lopp_kpv)::date >= current_date) AND docs.update_last_rekl(id) = 1', // динамический фильтр грида
             module: 'juht',
             userId: DocContext.userData.userId,
             uuid: DocContext.userData.uuid,
