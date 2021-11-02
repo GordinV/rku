@@ -2,6 +2,7 @@
 
 const React = require('react');
 const PropTypes = require('prop-types');
+const getTextValue = require('./../../../../libs/getTextValue');
 
 const styles = require('../button-register-styles'),
     Button = require('../button-register.jsx'),
@@ -32,7 +33,7 @@ class ButtonLogin extends React.PureComponent {
     }
 
     render() {
-        let value = this.state.value;
+        let value = getTextValue(this.state.value);
         let buttonStyle = Object.assign({}, styles.button, styles.buttonLogin);
 
         return <Button

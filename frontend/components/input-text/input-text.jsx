@@ -3,6 +3,7 @@ const radium = require('radium');
 
 const React = require('react'),
     styles = require('./input-text-styles');
+const getTextValue = require('./../../../libs/getTextValue');
 
 class Input extends React.PureComponent {
     constructor(props) {
@@ -41,10 +42,11 @@ class Input extends React.PureComponent {
                 this.state.readOnly ? styles.readOnly : {}
             );
 
+
         return (
             <div style={styles.wrapper}>
                 <label style={styles.label} htmlFor={this.props.name} ref="label">
-                    {this.props.title}
+                    {getTextValue(this.props.title)}
                 </label>
                 <input type='text'
                        id={this.props.name}

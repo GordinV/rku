@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 const userData = function (req, _uuid) {
 
+
     let uuid = _uuid ? _uuid : req.body.uuid ? req.body.uuid: req.app.locals.user.uuid;
 
     if (!req.session.users) {

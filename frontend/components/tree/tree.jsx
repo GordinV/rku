@@ -5,6 +5,7 @@ const PropTypes = require('prop-types');
 const React = require('react'),
     styles = require('./tree-styles.js');
 const DocContext = require('./../../doc-context.js');
+const getTextValue = require('./../../../libs/getTextValue');
 
 
 class Tree extends React.PureComponent {
@@ -114,7 +115,8 @@ class Tree extends React.PureComponent {
                     if (!subRow.is_node && this.state.parentId !== subRow.parentid) {
                         is_hidden = true;
                     }
-
+let name = getTextValue(subRow.name);
+                    console.log('tree', name, subRow.id)
                     return (
                         <li
                             className={subRow.is_node ? 'node' : 'menu'}
@@ -126,7 +128,7 @@ class Tree extends React.PureComponent {
                             ref={refId}>
                             {subRow.is_node ? (this.state.parentId == subRow.id ? '-' : '+') : null}
                             <img ref="image" src={styles.icons[subRow.kood.toLowerCase()]}/>
-                            {subRow.name}
+                            {name}
                             {this.getTree(subRow.id)}
                         </li>
                     )

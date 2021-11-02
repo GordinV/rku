@@ -11,6 +11,7 @@ const styles = require('../button-register-styles'),
     InputDate = require('../../input-date/input-date.jsx'),
     InputNumber = require('../../input-number/input-number.jsx'),
     ICON = 'execute';
+const getTextValue = require('./../../../../libs/getTextValue');
 
 
 class ButtonTask extends React.PureComponent {
@@ -33,7 +34,7 @@ class ButtonTask extends React.PureComponent {
     }
 
     render() {
-        let value = this.props.value ? this.props.value : 'Täitmine';
+        let value = getTextValue(this.props.value ? this.props.value : 'Täitmine');
         return (
             <div>
                 <Button

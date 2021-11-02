@@ -58,11 +58,16 @@ module.exports = {
     grid: {
         gridConfiguration: [
             {id: "id", name: "id", width: "10%", show: false},
-            {id: "aadress", name: "Aadress", width: "100%"},
+            {id: "aadress", name: "Aadress", width: "50%"},
+            {id: "omanik", name: "Omanik", width: "50%"},
         ],
         sqlString: `SELECT $2::INTEGER AS userId,
-                           o.*
+                           o.*,
+                           a.nimetus   AS omanik
                     FROM libs.object o
+                             INNER JOIN libs.object_owner oo ON oo.object_id = o.id
+                             INNER JOIN libs.asutus a ON a.id = oo.asutus_id
+
                     WHERE o.rekvid = $1::INTEGER
                       AND status <> 3`,     // проверка на права. $1 всегда ид учреждения $2 - всегда ид пользователя
         params: '',

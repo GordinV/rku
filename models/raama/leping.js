@@ -117,11 +117,11 @@ const Leping = {
         gridConfiguration: [
             {id: "id", name: "id", width: "25px", show: false},
             {id: "number", name: "Number", width: "10%"},
-            {id: "kpv", name: "Kuupaev", width: "10%"},
+            {id: "kpv", name: "Kuupäev", width: "10%"},
             {id: "asutus", name: "Asutus", width: "20%"},
             {id: "selgitus", name: "Selgitus", width: "20%"},
             {id: "objekt", name: "Objekt", width: "20%"},
-            {id: "tahtaeg", name: "Tahtaeg", width: "10%"},
+            {id: "tahtaeg", name: "Tähtaeg", width: "10%"},
             {id: "select", name: "Valitud", width: "7%", show: false, type: 'boolean', hideFilter: true}
 
         ],

@@ -7,6 +7,7 @@ const DocContext = require('./../../../doc-context.js');
 const styles = require('../button-register-styles'),
     Button = require('../button-register.jsx'),
     ICON = 'info';
+const getTextValue = require('./../../../../libs/getTextValue');
 
 
 class ButtonLogs extends React.PureComponent {
@@ -47,7 +48,7 @@ class ButtonLogs extends React.PureComponent {
     render() {
 
         return <Button
-            value={this.state.value}
+            value={getTextValue(this.state.value)}
             ref="btnLogid"
             style={styles.button}
             show={this.props.show ? this.props.show: true}

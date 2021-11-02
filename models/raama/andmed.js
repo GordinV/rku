@@ -79,7 +79,7 @@ const Andmed = {
         gridConfiguration: [
             {id: "id", name: "id", width: "1px", show: false},
             {id: "number", name: "Leping Nr.", width: "10%"},
-            {id: "kpv", name: "Kuupaev", width: "10%"},
+            {id: "kpv", name: "Kuupäev", width: "10%"},
             {id: "asutus", name: "Asutus", width: "20%"},
             {id: "objekt", name: "Objekt", width: "20%"},
             {id: "moodu", name: "Andmed", width: "40%"},

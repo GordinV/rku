@@ -13,6 +13,7 @@ const React = require('react'),
 
 //const    KEYS = [38, 40]; // мониторим только стрелки вверх и внизх
 let styles = require('./data-grid-styles');
+const getTextValue = require('./../../../libs/getTextValue');
 
 
 const isExists = (object, prop) => {
@@ -509,7 +510,7 @@ class DataGrid extends React.Component {
                 ref={headerIndex}
                 key={headerIndex}
                 onClick={this.handleGridHeaderClick.bind(this, column.id)}>
-                <span>{column.name}</span>
+                <span>{getTextValue(column.name)}</span>
                 {isHidden ? <img ref="imageAsc" style={imageStyleAsc} src={styles.icons['asc']} alt={'asc'}/> : null}
                 {isHidden ?
                     <img ref="imageDesc" style={imageStyleDesc} src={styles.icons['desc']} alt={'desc'}/> : null}

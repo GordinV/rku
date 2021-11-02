@@ -6,6 +6,7 @@ const React = require('react'),
     styles = require('../button-register-styles'),
     Button = require('../button-register.jsx'),
     ICON = 'info';
+const getTextValue = require('./../../../../libs/getTextValue');
 
 const DocContext = require('./../../../doc-context.js');
 
@@ -31,7 +32,7 @@ class ButtonInfo extends React.Component {
             <div>
                 <Button
                     ref="btnInfo"
-                    value={this.props.value}
+                    value={getTextValue(this.props.value)}
                     show={this.props.show}
                     disabled={this.props.disabled}
                     onClick={this.handleClick}>
