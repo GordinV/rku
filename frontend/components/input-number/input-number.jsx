@@ -1,6 +1,7 @@
 const React = require('react'),
     styles = require('./input-number-styles');
 const radium = require('radium');
+const getTextValue = require('./../../../libs/getTextValue');
 
 const PropTypes = require('prop-types');
 
@@ -47,7 +48,7 @@ class Input extends React.PureComponent {
         return (
             <div style={styles.wrapper}>
                 <label style={styles.label} htmlFor={this.props.name} ref="label">
-                    {this.props.title}
+                    {getTextValue(this.props.title)}
                 </label>
                 <input type={this.props.type ? this.props.type : 'number'}
                        id={this.props.name}

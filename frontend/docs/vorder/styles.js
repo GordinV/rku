@@ -14,7 +14,11 @@ module.exports = {
 
         gridContainer: {
             width: '100%'
-        }
-
+        },
     },
+    total: {
+        width: 'auto'
+    },
+
+
 };

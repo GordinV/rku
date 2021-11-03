@@ -31,22 +31,30 @@ module.exports = {
         ]
     },
     START_MENU: {
-      URL: '/newApi/startMenu'
+        URL: '/newApi/startMenu'
     },
-    REKL:{
+    REKL: {
         LIB_OBJS: [
             {id: 'asutused', filter: ``},
         ],
         URL: '/newApi/startMenu'
     },
-    TEATIS:{
-        toolbarProps : {
+    TEATIS: {
+        toolbarProps: {
             btnAdd: {
                 show: false,
                 disabled: false
             }
         }
     },
+    VORDER: {
+        LIB_OBJS: [
+            {id: 'kassa', filter: ''},
+            {id: 'asutused', filter: `where id in (select asutusid from lapsed.vanemad)`},
+            {id: 'nomenclature', filter: `where dok in ('VORDER')`}
+        ]
+    },
+
     // счета
     LEPING: {
         LIB_OBJS: [
@@ -67,8 +75,8 @@ module.exports = {
         LIB_OBJS: [
             {id: 'nomenclature', filter: `where dok = 'SORDER'`},
             {id: 'asutused', filter: ``},
-            {id:'kassa',filter:``},
-            {id:'arv', filter: ``}
+            {id: 'kassa', filter: ``},
+            {id: 'arv', filter: ``}
         ]
     },
 
@@ -78,6 +86,15 @@ module.exports = {
             {id: 'nomenclature', filter: `where dok = 'ARV'`},
             {id: 'asutused', filter: ``}
 
+        ],
+        EVENTS: [
+            {name: 'Häälestamine', method: null, docTypeId: null},
+            {name: 'Trükk kõik valitud arved', method: null, docTypeId: null},
+            {name: 'Email kõik valitud arved', method: null, docTypeId: null},
+            {name: 'Saada E-Arved (Omniva) kõik valitud arved', method: null, docTypeId: null},
+            {name: 'Saama XML e-arved kõik valitud arved', method: null, docTypeId: null},
+            {name: 'Saama XML e-arved (SEB) kõik valitud arved', method: null, docTypeId: null},
+            {name: 'Saama XML e-arved (SWED) kõik valitud arved', method: null, docTypeId: null},
         ]
     },
     NOMENCLATURE: {
@@ -99,7 +116,7 @@ module.exports = {
             {id: 6, kood: 'm3', name: 'M3'}
         ],
 
-        ALGORITMID:[
+        ALGORITMID: [
             {id: 1, kood: 'päev', name: 'Päev'},
             {id: 2, kood: 'konstantne', name: 'Konstantne'},
             {id: 3, kood: 'külastamine', name: 'Külastamine'},

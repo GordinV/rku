@@ -13,10 +13,11 @@ const DocumentTemplate = require('../../documentTemplate/index.jsx'),
     DokProp = require('../../../components/docprop/docprop.jsx'),
     relatedDocuments = require('../../../mixin/relatedDocuments.jsx'),
     ModalPage = require('./../../../components/modalpage/modalPage.jsx'),
-    styles = require('./vorder-style');
+    styles = require('./style');
 
-const LIBDOK = 'VORDER',
-    LIBRARIES = ['asutused', 'kontod', 'dokProps', 'tunnus', 'project', 'nomenclature', 'kassa'];
+const LIBDOK = 'VORDER';
+const LIBRARIES = require('./../../../../config/constants')[LIBDOK].LIB_OBJS;
+
 
 let now = new Date();
 
@@ -42,7 +43,7 @@ class Vorder extends React.PureComponent {
     render() {
         return <DocumentTemplate docId={this.state.docId}
                                  ref='document'
-                                 docTypeId='SORDER'
+                                 docTypeId={LIBDOK}
                                  initData={this.props.initData}
                                  reload={true}
                                  libs={LIBRARIES}
@@ -117,16 +118,6 @@ class Vorder extends React.PureComponent {
                                        ref='input-dokument'
                                        onChange={self.handleInputChange}
                                        readOnly={!isEditeMode}/>
-                        </div>
-                        <div style={styles.docColumn}>
-                            <DokProp title="Konteerimine: "
-                                     name='doklausid'
-                                     libs="dokProps"
-                                     value={self.docData.doklausid}
-                                     defaultValue={self.docData.dokprop || ''}
-                                     ref="dokprop"
-                                     onChange={self.handleInputChange}
-                                     readOnly={!isEditeMode}/>
                         </div>
                     </div>
                     <div style={styles.docRow}>
@@ -245,16 +236,6 @@ class Vorder extends React.PureComponent {
                                          bindData={false}
                                          ref='summa'
                                          onChange={self.handleGridRowInput}/>
-                        </div>
-                        <div style={styles.docRow}>
-
-                            <Select title="Korr. konto"
-                                    name='konto'
-                                    data={self.libs['kontod']}
-                                    value={row.konto || ''}
-                                    ref='konto'
-                                    collId="kood"
-                                    onChange={self.handleGridRowChange}/>
                         </div>
                         <div style={styles.docRow}>
                             <Select title="Tunnus:"

@@ -305,7 +305,7 @@ class Documents extends React.Component {
      */
     btnRefreshClick() {
         this.fetchData('selectDocs').then(() => {
-            this.setState({warning: 'Edukalt', warningType: 'ok'});
+            this.setState({warning: `${getTextValue('Edukalt')}`, warningType: 'ok'});
         });
     }
 
@@ -431,7 +431,7 @@ class Documents extends React.Component {
         this.setState({isDelete: false});
         if (btnEvent === 'Ok') {
             // delete document
-            this.setState({warning: 'Töötan...', warningType: 'notValid'});
+            this.setState({warning: `${getTextValue('Töötan')}...`, warningType: 'notValid'});
             this.fetchData('delete')
                 .catch((err) => {
                     console.error('error in fetch-> ', err);
@@ -439,7 +439,7 @@ class Documents extends React.Component {
                 .then((data) => {
                     if (data.error_message) {
                         console.error('data.error_message', data);
-                        this.setState({warning: `Tekkis viga: ${data.error_message}`, warningType: 'error'});
+                        this.setState({warning: `${getTextValue('Tekkis viga')}: ${data.error_message}`, warningType: 'error'});
                         if (data.status && data.status == 401) {
                             setTimeout(() => {
                                 document.location = `/login`;
@@ -740,11 +740,11 @@ class Documents extends React.Component {
                         }
 
                     }
-                    this.setState({warning: 'Edukalt', warningType: 'ok'})
+                    this.setState({warning: `${getTextValue('Edukalt')}`, warningType: 'ok'})
 
                 } else if (method == 'delete' && response.data && response.data.result && response.data.result.error_code) {
                     // проверка перед удалением
-                    let error = `Tekkis viga: kustutamine ebaõnnestus`;
+                    let error =   getTextValue(`Tekkis viga: kustutamine ebaõnnestus`);
                     this.setState({
                         warning: error,
                         warningType: 'error',
@@ -759,7 +759,7 @@ class Documents extends React.Component {
                 console.error('fetch error', error);
                 // Something happened in setting up the request that triggered an Error
                 this.setState({
-                    warning: `Tekkis viga ${error}`,
+                    warning: `${getTextValue('Tekkis viga')} ${error}`,
                     warningType: 'error'
                 });
                 return rejected(error);

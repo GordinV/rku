@@ -301,7 +301,7 @@ const Arv = {
         gridConfiguration: [
             {id: "id", name: "id", width: "2px", show: false},
             {id: "number", name: "Number", width: "10%"},
-            {id: "kpv", name: "Kuupaev", width: "15%"},
+            {id: "kpv", name: "Kuupäev", width: "15%"},
             {id: "summa", name: "Summa", width: "15%"},
             {id: "tahtaeg", name: "Tähtaeg", width: "15%"},
             {id: "jaak", name: "Jääk", width: "15%"},

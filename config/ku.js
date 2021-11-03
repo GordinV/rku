@@ -18,6 +18,7 @@ module.exports = {
     aa:'/ou/aa',
     kassa:'/ou/kassa',
     sorder:'/raama/sorder',
+    vorder:'/raama/vorder',
     rekl:'/juht/rekl',
     userid:'/ou/userid',
     kaive_aruanne:'/raama/kaive_aruanne'

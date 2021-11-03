@@ -15,15 +15,7 @@ const getSum = require('./../../../libs/getSum');
 const styles = require('./arv-register-styles');
 
 const DocContext = require('./../../doc-context.js');
-const EVENTS = [
-    {name: 'Häälestamine', method: null, docTypeId: null},
-    {name: 'Trükk kõik valitud arved', method: null, docTypeId: null},
-    {name: 'Email kõik valitud arved', method: null, docTypeId: null},
-    {name: 'Saada E-Arved (Omniva) kõik valitud arved', method: null, docTypeId: null},
-    {name: 'Saama XML e-arved kõik valitud arved', method: null, docTypeId: null},
-    {name: 'Saama XML e-arved (SEB) kõik valitud arved', method: null, docTypeId: null},
-    {name: 'Saama XML e-arved (SWED) kõik valitud arved', method: null, docTypeId: null},
-];
+const EVENTS = require('./../../../config/constants').ARV.EVENTS;
 
 /**
  * Класс реализует документ справочника признаков.
@@ -125,13 +117,6 @@ class Documents extends React.PureComponent {
                 ref='btnPrint'
                 value={EVENTS[1].name}
             />
-            <BtnArvesta
-                value={EVENTS[7].name}
-                onClick={this.onClickHandler}
-                ref={`btn-${EVENTS[7].name}`}
-                key={`key-${EVENTS[7].name}`}
-            />
-
             <BtnSettings
                 history={self.props.history ? self.props.history : null}
                 docTypeId={DOC_TYPE_ID}
