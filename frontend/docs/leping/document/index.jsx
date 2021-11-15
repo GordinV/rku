@@ -98,7 +98,7 @@ class Leping extends React.PureComponent {
                                        ref='input-kpv'
                                        readOnly={!isEditMode}
                                        onChange={self.handleInputChange}/>
-                            <InputDate title='Tähtaeg '
+                            <InputDate title='Tähtaeg'
                                        name='tahtaeg'
                                        value={self.docData.tahtaeg}
                                        ref="input-tahtaeg"
@@ -135,7 +135,7 @@ class Leping extends React.PureComponent {
                     </div>
                     <div style={styles.docRow}>
                         <div style={styles.docColumn}>
-                            <Select title="Objekt: "
+                            <Select title="Objekt"
                                     name='objektid'
                                     libs="objekt"
                                     value={self.docData.objektid}

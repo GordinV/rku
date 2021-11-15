@@ -118,7 +118,7 @@ class Leping extends React.PureComponent {
                 <div style={styles.doc}>
                     <div style={styles.docRow}>
                         <div style={styles.docColumn}>
-                            <InputDate title='Kuupäev '
+                            <InputDate title='Kuupäev'
                                        name='kpv'
                                        value={self.docData.kpv}
                                        ref='input-kpv'
