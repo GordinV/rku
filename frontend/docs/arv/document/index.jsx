@@ -17,6 +17,7 @@ const
     styles = require('./arve.styles');
 const Round = require('./../../../../libs/round_to_2');
 const Loading = require('./../../../components/loading/index.jsx');
+const getTextValue = require('./../../../../libs/getTextValue');
 
 const DocContext = require('./../../../doc-context');
 const LIB_OBJS = require('./../../../../config/constants').ARV.LIB_OBJS;
@@ -98,13 +99,13 @@ class Arve extends React.PureComponent {
                                        value={self.docData.number || ''}
                                        readOnly={!isEditMode}
                                        onChange={self.handleInputChange}/>
-                            <InputDate title='Kuupäev '
+                            <InputDate title='Kuupäev'
                                        name='kpv'
                                        value={self.docData.kpv}
                                        ref='input-kpv'
                                        readOnly={!isEditMode}
                                        onChange={self.handleInputChange}/>
-                            <InputDate title='Tähtaeg '
+                            <InputDate title='Tähtaeg'
                                        name='tahtaeg'
                                        value={self.docData.tahtaeg}
                                        ref="input-tahtaeg"
@@ -115,7 +116,7 @@ class Arve extends React.PureComponent {
                     </div>
                     <div style={styles.docRow}>
                         <div style={styles.docColumn}>
-                            <Select title="Maksja:"
+                            <Select title="Maksja"
                                     libs="asutused"
                                     name='asutusid'
                                     data={self.libs['asutused']}
@@ -140,7 +141,7 @@ class Arve extends React.PureComponent {
                     <div style={styles.docRow}>
                         <div style={styles.docColumn}>
 
-                            <InputText title='Lisa '
+                            <InputText title='Lisa'
                                        name='lisa'
                                        value={self.docData.lisa || ''}
                                        ref='input-lisa'
@@ -156,7 +157,7 @@ class Arve extends React.PureComponent {
                                        onChange={self.handleInputChange}/>
                         </div>
                         <div style={styles.docColumn}>
-                            <Select title="Arveldus arve "
+                            <Select title="Arveldus arve"
                                     name='aa_id'
                                     libs="aa"
                                     value={self.docData.aa}
@@ -190,21 +191,21 @@ class Arve extends React.PureComponent {
                                   ref="data-grid"/>
                     </div>
                     <div style={styles.docRow}>
-                        <InputNumber title="Summa "
+                        <InputNumber title="Summa"
                                      name='summa'
                                      ref="input-summa"
                                      value={Number(self.docData.summa) || 0}
                                      disabled={true}
                                      style={styles.summa}
                         />
-                        <InputNumber title="Käibemaks "
+                        <InputNumber title="Käibemaks"
                                      name='kbm'
                                      ref="input-kbm"
                                      disabled={true}
                                      style={styles.summa}
                                      value={Number(self.docData.kbm) || 0}
                         />
-                        <InputNumber title="Jääk:"
+                        <InputNumber title="Jääk"
                                      type='currency'
                                      name='jaak'
                                      ref="input-jaak"
@@ -219,7 +220,7 @@ class Arve extends React.PureComponent {
                     <br/>
                     <div style={styles.docRow}>
                         <label ref="label">
-                            {'Tasud'}
+                            {getTextValue('Tasud')}
                         </label>
                     </div>
                     <div style={styles.docRow}>

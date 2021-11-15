@@ -17,6 +17,8 @@ const
     ModalPage = require('../../../components/modalpage/modalPage.jsx'),
     styles = require('./sorder-style');
 
+const getTextValue = require('./../../../../libs/getTextValue');
+
 const DOC_TYPE_ID = 'SORDER';
 const DocContext = require('./../../../doc-context.js');
 const DocRights = require('./../../../../config/doc_rights');
@@ -217,7 +219,7 @@ class Sorder extends React.PureComponent {
                     />
                 </div>
                 <div style={styles.docRow}>
-                    <TextArea title="Märkused:"
+                    <TextArea title="Märkused"
                               name='muud'
                               ref="textarea-muud"
                               value={self.docData.muud || ''}

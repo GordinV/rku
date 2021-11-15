@@ -17,6 +17,8 @@ const DocumentTemplate = require('../../documentTemplate/index.jsx'),
     ButtonUuendaLib = require('../../../components/button-register/button-uuenda-lib/index.jsx'),
     styles = require('./smk-style');
 
+const getTextValue = require('./../../../../libs/getTextValue');
+
 const DOC_TYPE_ID = 'SMK';
 const DocContext = require('./../../../doc-context.js');
 
@@ -89,7 +91,7 @@ class Smk extends React.PureComponent {
     renderer(self) {
         if (!self || !self.docData || !self.docData.kpv) {
             return (<div style={styles.doc}>
-                <Loading label={'Laadimine...'}/>
+                <Loading label={getTextValue('Laadimine...')}/>
             </div>);
         }
 
@@ -218,7 +220,7 @@ class Smk extends React.PureComponent {
                 <br/>
                 <div style={styles.docRow}>
                     <label ref="label">
-                        {'Arved'}
+                        {getTextValue('Arved')}
                     </label>
                 </div>
                 <div style={styles.docRow}>
