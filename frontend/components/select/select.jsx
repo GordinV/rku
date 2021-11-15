@@ -5,6 +5,7 @@ const radium = require('radium');
 
 const React = require('react'),
     styles = require('./select-styles');
+const getTextValue = require('./../../../libs/getTextValue');
 
 class Select extends React.PureComponent {
     constructor(props) {
@@ -67,7 +68,7 @@ class Select extends React.PureComponent {
             <div style={styles.wrapper} ref="wrapper">
                 {this.props.title ?
                     <label ref="label" style={styles.label}
-                           htmlFor={this.props.name}>{this.props.title}
+                           htmlFor={this.props.name}>{getTextValue(this.props.title)}
                     </label>
                     : null}
 

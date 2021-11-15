@@ -6,6 +6,7 @@ const radium = require('radium');
 const React = require('react'),
     styles = require('./input-date-styles');
 
+const getTextValue = require('./../../../libs/getTextValue');
 let currentDate = new Date().toLocaleDateString();
 
 class InputDate extends React.PureComponent {
@@ -66,7 +67,7 @@ class InputDate extends React.PureComponent {
         return (
             <div style={styles.wrapper}>
                 <label style={styles.label} htmlFor={this.props.name} ref="label">
-                    {this.props.title}
+                    {getTextValue(this.props.title)}
                 </label>
 
                 <input type='date'

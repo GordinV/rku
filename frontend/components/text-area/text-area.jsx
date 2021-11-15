@@ -1,6 +1,7 @@
 const React = require('react'),
     styles = require('./text-area-styles');
 const radium = require('radium');
+const getTextValue = require('./../../../libs/getTextValue');
 
 const PropTypes = require('prop-types');
 
@@ -47,7 +48,7 @@ class Input extends React.PureComponent {
             <div style={styles.wrapper}>
 
                 <label htmlFor={this.props.name} ref="label"
-                       style={styles.label}><span>{this.props.title}</span>
+                       style={styles.label}><span>{getTextValue(this.props.title)}</span>
                 </label>
 
                 <textarea
