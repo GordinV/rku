@@ -124,7 +124,7 @@ class Smk extends React.PureComponent {
                                        ref="input-number"
                                        onChange={self.handleInputChange}
                                        readOnly={!isEditeMode}/>
-                            <InputDate title='Kuupäev '
+                            <InputDate title='Kuupäev'
                                        name='kpv'
                                        value={self.docData.kpv || '01-07-2020'}
                                        ref='input-kpv'
@@ -140,13 +140,13 @@ class Smk extends React.PureComponent {
                                     ref="select-aaId"
                                     readOnly={!isEditeMode}/>
 
-                            <InputDate title='Maksepäev '
+                            <InputDate title='Maksepäev'
                                        name='maksepaev'
                                        value={self.docData.maksepaev || ''}
                                        ref='input-maksepaev'
                                        onChange={self.handleInputChange}
                                        readOnly={!isEditeMode}/>
-                            <InputText title='Viitenumber '
+                            <InputText title='Viitenumber'
                                        name='viitenr'
                                        value={self.docData.viitenr || ''}
                                        ref='input-viitenr'
@@ -177,7 +177,7 @@ class Smk extends React.PureComponent {
                     <div style={styles.docRow}>
                         <div style={styles.docColumn}>
 
-                            <InputText title="Kokku: "
+                            <InputText title="Kokku:"
                                        name='summa'
                                        ref="input-summa"
                                        value={String(self.docData.summa) || '0.00'}
@@ -185,7 +185,7 @@ class Smk extends React.PureComponent {
                                        disabled={true}/>
                         </div>
                         <div style={styles.docColumn}>
-                            <InputText title="Määramata summa: "
+                            <InputText title="Määramata summa:"
                                        name='mk_jaak'
                                        ref="input-jaak"
                                        value={String(self.docData.jaak) || '0.00'}

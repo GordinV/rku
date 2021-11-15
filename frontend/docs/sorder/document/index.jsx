@@ -100,7 +100,7 @@ class Sorder extends React.PureComponent {
             <div style={styles.doc}>
                 <div style={styles.docRow}>
                     <div style={styles.docColumn}>
-                        <InputText title='Number:'
+                        <InputText title='Number'
                                    name='number'
                                    value={String(self.docData.number) || ''}
                                    ref="input-number"
@@ -110,13 +110,13 @@ class Sorder extends React.PureComponent {
                 </div>
                 <div style={styles.docRow}>
                     <div style={styles.docColumn}>
-                        <InputDate title='Kuupäev:'
+                        <InputDate title='Kuupäev'
                                    name='kpv'
                                    value={self.docData.kpv}
                                    ref='input-kpv'
                                    onChange={self.handleInputChange}
                                    readOnly={!isEditeMode}/>
-                        <Select title="Kassa:"
+                        <Select title="Kassa"
                                 name='kassa_id'
                                 libs="kassa"
                                 value={self.docData.kassa_id}
@@ -129,7 +129,7 @@ class Sorder extends React.PureComponent {
                 </div>
                 <div style={styles.docRow}>
                     <div style={styles.docColumn}>
-                        <Select title="Raha saaja:"
+                        <Select title="Raha saaja"
                                 libs="asutused"
                                 name='asutusid'
                                 data={self.libs['asutused']}
@@ -153,7 +153,7 @@ class Sorder extends React.PureComponent {
                 </div>
                 <div style={styles.docRow}>
                     <div style={styles.docColumn}>
-                        <Select title="Arve nr:"
+                        <Select title="Arve nr"
                                 libs="arv"
                                 name='arvid'
                                 data={arved}
@@ -163,7 +163,7 @@ class Sorder extends React.PureComponent {
                                 collId={'id'}
                                 readOnly={!isEditeMode}/>
 
-                        <InputText title='Dokument:'
+                        <InputText title='Dokument'
                                    name='dokument'
                                    value={self.docData.dokument || ''}
                                    ref='input-dokument'
@@ -180,7 +180,7 @@ class Sorder extends React.PureComponent {
                               readOnly={!isEditeMode}/>
                 </div>
                 <div style={styles.docRow}>
-                    <TextArea title="Aadress:"
+                    <TextArea title="Aadress"
                               name='aadress'
                               ref="textarea-aadress"
                               value={self.docData.aadress || ''}
@@ -188,7 +188,7 @@ class Sorder extends React.PureComponent {
                               readOnly={!isEditeMode}/>
                 </div>
                 <div style={styles.docRow}>
-                    <TextArea title="Alus:"
+                    <TextArea title="Alus"
                               name='alus'
                               ref="textarea-alus"
                               value={self.docData.alus || ''}
@@ -208,7 +208,7 @@ class Sorder extends React.PureComponent {
                               ref="data-grid"/>
                 </div>
                 <div style={styles.docRow}>
-                    <InputNumber title="Summa: "
+                    <InputNumber title="Summa"
                                  name='summa'
                                  ref="input-summa"
                                  value={Number(self.docData.summa) || 0}
@@ -230,7 +230,7 @@ class Sorder extends React.PureComponent {
                     : null}
                 <ModalPage ref='modalpageCreateOrder'
                            modalPageBtnClick={this.modalPageBtnClick}
-                           modalPageName='Kas koosta SMK'
+                           modalPageName='Kas koosta SORDER'
                            show={this.state.getSMK}>
                     Kas koosta kassaorder?
                 </ModalPage>

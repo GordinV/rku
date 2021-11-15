@@ -92,7 +92,7 @@ class Leping extends React.PureComponent {
                                        value={self.docData.number || ''}
                                        readOnly={!isEditMode}
                                        onChange={self.handleInputChange}/>
-                            <InputDate title='Kuupäev '
+                            <InputDate title='Kuupäev'
                                        name='kpv'
                                        value={self.docData.kpv}
                                        ref='input-kpv'
