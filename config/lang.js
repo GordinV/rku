@@ -26,6 +26,7 @@ module.exports = {
     "Dokumendid": ["Documents", "Dokumendid", "Документы"],
     "Lepingud": ["Contracts", "Lepingud", "Договора"],
     "Mõõdukiri andmed": ["Data", "Andmed", "Показания"],
+    "Mõõdu andmed":["Data", "Andmed", "Показания"],
     "Sissemakse korraldused": ["Income orders", "Sissemakse korraldused", "Входящие платежные поручения"],
     "Väljamakse korraldused": ["Outcome orders", "Väljamakse korraldused", "Исходящие платежные поручения"],
     "Sissemakse kassaorder": ["Income cash orders", "Sissemakse kassaorder", "Приходные кассовые ордера"],

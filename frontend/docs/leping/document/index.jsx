@@ -16,6 +16,8 @@ const
     ModalPage = require('../../../components/modalpage/modalPage.jsx'),
     ButtonEdit = require('../../../components/button-register/button-register-edit/button-register-edit.jsx'),
     styles = require('./styles');
+const getTextValue = require('./../../../../libs/getTextValue');
+
 const Round = require('./../../../../libs/round_to_2');
 const Loading = require('./../../../components/loading/index.jsx');
 
@@ -174,7 +176,7 @@ class Leping extends React.PureComponent {
                     <br/>
                     <div style={styles.docRow}>
                         <label ref="label">
-                            {'Mõõdu andmed'}
+                            {getTextValue('Mõõdu andmed')}
                         </label>
                     </div>
 

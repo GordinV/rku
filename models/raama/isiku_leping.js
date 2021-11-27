@@ -99,7 +99,7 @@ const Leping = {
             {id: "asutus", name: "Asutus", width: "20%"},
             {id: "selgitus", name: "Selgitus", width: "20%"},
             {id: "objekt", name: "Objekt", width: "20%"},
-            {id: "tahtaeg", name: "Tahtaeg", width: "10%"},
+            {id: "tahtaeg", name: "Tähtaeg", width: "10%"},
         ],
         sqlString: `SELECT d.id,
                            d.rekvid,
