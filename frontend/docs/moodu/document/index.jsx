@@ -98,7 +98,7 @@ class Leping extends React.PureComponent {
                         row.noms.forEach(nom => {
                             gridData.push({
                                 id: 0,
-                                nomid: nom.id,
+                                nomid: nom.nom_id,
                                 kogus: 0,
                                 eel_kogus: nom.eel_kogus,
                                 hind: nom.hind,
@@ -287,6 +287,7 @@ class Leping extends React.PureComponent {
 
 //            if (doc.gridRowData && !doc.gridRowData['nomid']) warning = warning + ' Код операции';
             if (!doc.gridRowData['kogus']) warning = warning + ' Kogus';
+            if (!doc.gridRowData['nomid']) warning = warning + ' Teenus';
         }
         return warning;
 

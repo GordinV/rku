@@ -15,7 +15,8 @@ class Documents extends React.PureComponent {
     }
 
     render() {
-        let DOC_TYPE_ID = 'ANDMED';
+        let DOC_TYPE_ID = this.props.module == 'kasutaja' ? 'ISIKU_ANDMED' : 'ANDMED';
+
         return (
             <div>
                 <DocumentRegister initData={this.props.initData}

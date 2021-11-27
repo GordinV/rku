@@ -24,7 +24,7 @@ BEGIN
     WHERE d.id = l_arv_Id;
 
     SELECT coalesce(sum(summa) FILTER ( WHERE arvtasu.kpv <= current_date ), 0),
-           coalesce(max(arvtasu.kpv), NULL :: DATE)
+           coalesce(max(arvtasu.kpv)::date, NULL :: DATE)
            INTO l_tasu_summa, l_kpv
     FROM docs.arvtasu arvtasu
     WHERE arvtasu.doc_arv_Id = l_arv_Id
@@ -43,8 +43,6 @@ BEGIN
     ELSE
         l_jaak := l_arv_summa - l_tasu_summa;
     END IF;
-
-    raise notice 'l_jaak %, l_arv_summa %, l_tasu_summa %', l_jaak, l_arv_summa, l_tasu_summa;
 
     UPDATE docs.arv
     SET tasud = l_kpv,

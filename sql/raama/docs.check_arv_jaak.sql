@@ -44,6 +44,6 @@ $BODY$
 GRANT EXECUTE ON FUNCTION docs.check_arv_jaak(INTEGER, INTEGER) TO db;
 
 /*
-SELECT docs.check_arv_jaak(null, 4711);
+SELECT docs.check_arv_jaak(22, 14);
 
  */

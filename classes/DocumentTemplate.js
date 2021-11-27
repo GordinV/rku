@@ -142,7 +142,7 @@ class Document {
 
 
         }
-console.log('sql', sql, params);
+
         return await db.queryDb(sql, params, sortBy, sqlWhere, limit, subTotals);
     }
 

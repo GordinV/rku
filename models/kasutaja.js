@@ -1,7 +1,7 @@
 module.exports = {
     grid: {
         gridConfiguration: [
-            {id: "id", name: "id", width: "10%", show: false},
+            {id: "id", name: "id", width: "10%", show: true},
             {id: "dokument", name: "Dokument", width: "25%"},
             {id: "kpv", name: "Kuupäev", width: "15%", type: "date", interval: true},
             {id: "objekt", name: "Objekt", width: "50%"}

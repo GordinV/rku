@@ -1086,7 +1086,8 @@ class DocumentTemplate extends React.Component {
      */
     modalPageClick(btnEvent, data) {
         let showModal = false;
-        if (btnEvent === 'Ok') {
+
+        if (btnEvent === 'Ok' || btnEvent === 'OK' ) {
             // ищем по ид строку в данных грида, если нет, то добавим строку
             if (!this.docData.gridData.length || !this.docData.gridData.some(row => row.id === this.gridRowData.id)) {
                 // вставка новой строки

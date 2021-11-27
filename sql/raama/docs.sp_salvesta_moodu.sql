@@ -102,7 +102,7 @@ BEGIN
             SELECT *
             INTO json_record
             FROM json_to_record(
-                         json_object) AS x(id TEXT, nomId INTEGER, kogus NUMERIC(14, 4), hind NUMERIC(14, 4),
+                         json_object) AS x(id TEXT, nomid INTEGER, kogus NUMERIC(14, 4), hind NUMERIC(14, 4),
                                            summa NUMERIC(14, 4),
                                            muud TEXT, formula TEXT, kbm INTEGER,
                                            soodus INTEGER);

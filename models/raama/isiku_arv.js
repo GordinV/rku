@@ -26,7 +26,7 @@ const Arv = {
                          a.kbmta,
                          a.kbm,
                          a.summa,
-                         a.tasud,
+                         to_char(a.tasud,'YYYY-MM-DD'),
                          trim(a.tasudok)                                                   AS tasudok,
                          a.muud,
                          a.jaak,

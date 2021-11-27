@@ -22,7 +22,7 @@ const Andmed = {
                            INNER JOIN libs.object o ON o.id = l1.objektid
                   WHERE d.id = $1`,
             sqlAsNew: `SELECT $1::INTEGER                                                       AS id,
-                              $2                                                       AS userid,
+                              $2::INTEGER                                                       AS userid,
                               NULL                                                              AS rekvId,
                               to_char(current_date,'YYYY-MM-DD')                                AS kpv,
                               NULL                                                              AS asutusid,
@@ -84,7 +84,7 @@ const Andmed = {
             {id: "objekt", name: "Objekt", width: "20%"},
             {id: "moodu", name: "Andmed", width: "40%"},
         ],
-        sqlString: `SELECT $2::integer                           AS user_id,
+        sqlString: `SELECT $2::INTEGER                  AS user_id,
                            d.id,
                            d.rekvid,
                            d.number,
@@ -93,8 +93,11 @@ const Andmed = {
                            d.asutusid,
                            d.objekt                     AS objekt,
                            d.moodu
-                    FROM cur_moodu d
-                    WHERE d.rekvId = $1::integer
+                    FROM cur_moodu d,
+                         libs.asutus_user_id au
+                    WHERE d.rekvId = $1::INTEGER
+                      AND au.asutus_id = d.asutusid
+                      AND au.user_id = $2::INTEGER
                     ORDER BY d.number`,     //  $1 всегда ид учреждения $2 - всегда ид пользователя
         params: '',
         alias: 'curLepingud'

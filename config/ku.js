@@ -11,6 +11,7 @@ module.exports = {
     isiku_leping:'/raama/isiku_leping',
     nomenclature: '/libs/nomenclature',
     andmed:'/raama/andmed',
+    isiku_andmed:'/raama/isiku_andmed',
     arv:'/raama/arv',
     isiku_arv:'/raama/isiku_arv',
     smk:'/raama/smk',

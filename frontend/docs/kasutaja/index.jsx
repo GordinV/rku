@@ -47,9 +47,6 @@ class Register extends React.PureComponent {
     }
 
     renderer(self) {
-        if (self.gridData) {
-            this.data = self.gridData;
-        }
         return (<ToolbarContainer>
             <BtnAddMoodu
                 onClick={this.onClickHandler}
@@ -67,11 +64,13 @@ class Register extends React.PureComponent {
 
     btnEditClick(row_id) {
         // ищем тип документа
-        let gridRowId = this.data.findIndex(row => row.id = row_id);
-        if (gridRowId > -1) {
-            let docTypeId = this.data[gridRowId].doc_type_id;
+        const Doc = this.refs['register'];
+
+        let gridRow = Doc.gridData.filter(row => row.id == row_id);
+        if (gridRow) {
+            let docTypeId  = gridRow[0].doc_type_id;
             return this.props.history.push({
-                pathname: `/${this.props.module}/${docTypeId}/${row_id}`,
+                pathname: `/${this.props.module}/${docTypeId}/${gridRow[0].id}`,
                 state: {module: this.props.module}
             });
         }

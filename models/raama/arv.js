@@ -292,6 +292,7 @@ const Arv = {
             query: null,
             multiple: false,
             alias: 'validate_asutus',
+            not_initial_load: true,
             data: []
         },
 

@@ -72,7 +72,13 @@ class App extends React.Component {
                                                           module={MODULE}/>}/>
                 <Route exact path="/kasutaja/isiku_leping/:docId"
                        component={LepingDocument}/>
+                <Route exact path="/kasutaja/leping/:docId"
+                       component={LepingDocument}/>
                 <Route exact path="/kasutaja/leping"
+                       render={(props) => <LepingRegister history={props.history}
+                                                          initData={this.props.initData}
+                                                          module={MODULE}/>}/>
+                <Route exact path="/kasutaja/isiku_leping"
                        render={(props) => <LepingRegister history={props.history}
                                                           initData={this.props.initData}
                                                           module={MODULE}/>}/>
@@ -93,10 +99,16 @@ class App extends React.Component {
 
                 <Route exact path="/kasutaja/andmed/:docId"
                        component={MooduDocument}/>
-                <Route exact path="/kasutaja/andmed"
+                <Route exact path="/kasutaja/isiku_andmed/:docId"
+                       component={MooduDocument}/>
+                <Route exact path="/kasutaja/isiku_andmed"
                        render={(props) => <MooduRegister history={props.history}
                                                           initData={this.props.initData}
                                                           module={MODULE}/>}/>
+                <Route exact path="/kasutaja/andmed"
+                       render={(props) => <MooduRegister history={props.history}
+                                                         initData={this.props.initData}
+                                                         module={MODULE}/>}/>
             </StyleRoot>)
     }
 
