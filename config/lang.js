@@ -97,6 +97,7 @@ module.exports = {
     "Tekkis viga": ["Got error", "Tekkis viga", "Ошибка"],
     "Kas koosta SMK":["Create payment order?","Kas koosta SMK?","Создать платежное поручение?"],
     "Edukalt": ["Ok", "Edukalt", "Ок"],
-    "Tekkis viga: kustutamine ebaõnnestus": ["Error, delete not success", "Tekkis viga: kustutamine ebaõnnestus", "Ошибка, удаление не прошло"]
-
+    "Tekkis viga: kustutamine ebaõnnestus": ["Error, delete not success", "Tekkis viga: kustutamine ebaõnnestus", "Ошибка, удаление не прошло"],
+    "SISALDAB": ["CONTAINS", "SISALDAB", "СОДЕРЖИТ"],
+    "EI SISALDA": ["DO NOT CONTAIN", "EI SISALDA", "НЕ СОДЕРЖИТ"]
 }

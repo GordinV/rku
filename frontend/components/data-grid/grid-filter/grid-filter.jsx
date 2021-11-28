@@ -3,6 +3,7 @@
 const PropTypes = require('prop-types');
 const DocContext = require('./../../../doc-context.js');
 const prepareData = require('./../../../../libs/prepaireFilterData');
+const getTextValue = require('./../../../../libs/getTextValue');
 
 const React = require('react'),
     styles = require('./grid-filter-styles');
@@ -178,7 +179,7 @@ class GridFilter extends React.PureComponent {
 
             return <div style={styles.formWidget} key={'fieldSet-' + row.id}>
                 <div style={styles.formWidgetLabel}>
-                    <span>{row.name}</span>
+                    <span>{getTextValue(row.name)}</span>
                 </div>
                 <div style={styles.formWidgetInput}>
                     {row.interval ? this.returnInterval(row)
@@ -222,14 +223,14 @@ class GridFilter extends React.PureComponent {
                         disabled={!value}
                         id='sqlNo'
                         onChange={this.handleSelectChange}>
-                    <option value={1}>{'SISALDAB'}</option>
-                    <option value={0}>{'EI SISALDA'}</option>
+                    <option value={1}>{getTextValue('SISALDAB')}</option>
+                    <option value={0}>{getTextValue('EI SISALDA')}</option>
                 </select>
                 <input style={styles.input}
                        type={componentType}
-                       title={row.name}
+                       title={getTextValue(row.name)}
                        name={row.id}
-                       placeholder={row.toolTip ? row.toolTip : row.name}
+                       placeholder={row.toolTip ? getTextValue(row.toolTip) : getTextValue(row.name)}
                        ref={row.id}
                        value={value || ''}
                        onChange={this.handleChange}
