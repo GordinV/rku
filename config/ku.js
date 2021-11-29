@@ -22,5 +22,6 @@ module.exports = {
     vorder:'/raama/vorder',
     rekl:'/juht/rekl',
     userid:'/ou/userid',
-    kaive_aruanne:'/raama/kaive_aruanne'
+    kaive_aruanne:'/raama/kaive_aruanne',
+    rekv: '/ou/rekv'
 };

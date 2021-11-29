@@ -93,7 +93,7 @@ class Document {
         let data = await db.queryDb(sql, [params.data, params.userId, params.asutusId]);
 
         if (data && data.error_code) {
-            console.error('Viga', data.error_message, data);
+            console.error('Viga', sql, JSON.stringify(params.data), data.error_message, data);
             return data;
         }
 

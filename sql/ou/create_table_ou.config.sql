@@ -19,6 +19,8 @@ CREATE TABLE ou.config (
     propertis JSONB
 );
 
+ALTER TABLE ou.config add COLUMN if not EXISTS properties jsonb;
+
 
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE ou.config TO db;
 

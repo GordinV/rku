@@ -49,10 +49,12 @@ DECLARE
     v_user                 RECORD;
     new_user_id            INTEGER;
     is_import              BOOLEAN = data ->> 'import';
+    user_roles             JSON;
 
 BEGIN
 
-    SELECT kasutaja INTO userName
+    SELECT kasutaja
+    INTO userName
     FROM ou.userid u
     WHERE u.rekvid = user_rekvid
       AND u.id = user_id;
@@ -101,7 +103,8 @@ BEGIN
     THEN
 
 
-        SELECT row_to_json(row) INTO new_history
+        SELECT row_to_json(row)
+        INTO new_history
         FROM (SELECT now()    AS created,
                      userName AS user) row;
 
@@ -111,38 +114,45 @@ BEGIN
         VALUES (doc_parentid, doc_regkood, doc_nimetus, doc_kbmkood, doc_aadress, doc_haldus, doc_tel, doc_faks,
                 doc_email,
                 doc_juht, doc_raama, doc_muud, new_history,
-                array_position((enum_range(NULL :: DOK_STATUS)), 'active'), json_object) RETURNING id
+                1, json_object) RETURNING id
                    INTO rekv_id;
 
         -- should insert admin user
+
+        user_roles = (SELECT to_jsonb(row)
+                      FROM (SELECT TRUE            AS is_kasutaja,
+                                   TRUE            AS is_peakasutaja,
+                                   TRUE            AS is_admin,
+                                   TRUE :: BOOLEAN AS is_asutuste_korraldaja
+                           ) row);
 
         SELECT 0                              AS id,
                rekv_id                        AS rekvid,
                ltrim(rtrim(kasutaja)) :: TEXT AS kasutaja,
                ltrim(rtrim(ametnik)) :: TEXT  AS ametnik,
-               kasutaja_,
-               peakasutaja_,
-               admin,
+               properties,
                muud
-               INTO v_user
+        INTO v_user
         FROM ou.userid
         WHERE id = user_id;
 
-        SELECT row_to_json(row) INTO user_json
+        SELECT row_to_json(row)
+        INTO user_json
         FROM (SELECT 0         AS id,
                      is_import AS import,
                      v_user    AS data) row;
 
-/*        new_user_id = ou.sp_salvesta_userid(user_json, user_id, rekv_id);
+        new_user_id = ou.sp_salvesta_userid(user_json, user_id, rekv_id);
+        raise notice 'new_user_id %', new_user_id;
 
         IF new_user_id IS NULL OR new_user_id = 0
         THEN
             RAISE EXCEPTION 'Uue kasutaja salvestamine eba õnnestus';
         END IF;
-*/
     ELSE
 
-        SELECT row_to_json(row) INTO new_history
+        SELECT row_to_json(row)
+        INTO new_history
         FROM (SELECT now()    AS updated,
                      userName AS user,
                      r.*
@@ -151,7 +161,8 @@ BEGIN
 
         -- save aa old state
 
-        SELECT array_to_json(array_agg(row_to_json(row_data))) INTO aa_history
+        SELECT array_to_json(array_agg(row_to_json(row_data)))
+        INTO aa_history
         FROM (SELECT aa.*
               FROM ou.aa aa
               WHERE aa.parentid = doc_id) row_data;
@@ -160,9 +171,7 @@ BEGIN
         new_history = new_history :: JSONB || aa_history :: JSONB;
 
         UPDATE ou.rekv
-        SET 
---            parentid   = doc_parentid,
-            regkood    = doc_regkood,
+        SET regkood    = doc_regkood,
             kbmkood    = doc_kbmkood,
             nimetus    = doc_nimetus,
             aadress    = doc_aadress,
@@ -183,7 +192,8 @@ BEGIN
         SELECT *
         FROM json_array_elements(doc_details)
         LOOP
-            SELECT * INTO json_record
+            SELECT *
+            INTO json_record
             FROM jsonb_to_record(
                          json_object) AS x (id TEXT, parentid INTEGER, arve TEXT, nimetus TEXT, default_ BOOLEAN,
                                             kassa INTEGER,
@@ -240,8 +250,7 @@ $BODY$
     COST 100;
 
 
-GRANT EXECUTE ON FUNCTION ou.sp_salvesta_rekv(JSON, INTEGER, INTEGER) TO dbkasutaja;
-GRANT EXECUTE ON FUNCTION ou.sp_salvesta_rekv(JSON, INTEGER, INTEGER) TO dbpeakasutaja;
+GRANT EXECUTE ON FUNCTION ou.sp_salvesta_rekv(JSON, INTEGER, INTEGER) TO db;
 
 /*
 SELECT ou.sp_salvesta_rekv('{"id":1,"data":{"docTypeId":"REKV","module":"lapsed","userId":70,"uuid":"679c46a0-181b-11ea-9662-c7e1326a899d","docId":63,"context":null,"doc_type_id":"REKV","userid":70,"id":63,"parentid":0,"nimetus":"RAHANDUSAMET T","aadress":"Peetri 5, Narva","email":"rahandus@narva.ee","faks":"3599181","haldus":"","juht":"Jelena Golubeva","raama":"Jelena Tsekanina","kbmkood":"","muud":"Narva Linnavalitsuse Rahandusamet","regkood":"75008427","tel":"3599190","tahtpaev":null,"ftp":null,"login":null,"parool":null,"earved":"106549:elbevswsackajyafdoupavfwewuiafbeeiqatgvyqcqdqxairz","earved_omniva":"https://finance.omniva.eu/finance/erp/","row":[{"doc_type_id":"REKV","userid":70,"id":63,"parentid":0,"nimetus":"RAHANDUSAMET T","aadress":"Peetri 5, Narva","email":"rahandus@narva.ee","faks":"3599181","haldus":"","juht":"Jelena Golubeva","raama":"Jelena Tsekanina","kbmkood":"","muud":"Narva Linnavalitsuse Rahandusamet","regkood":"75008427","tel":"3599190","tahtpaev":null,"ftp":null,"login":null,"parool":null,"earved":"106549:elbevswsackajyafdoupavfwewuiafbeeiqatgvyqcqdqxairz","earved_omniva":"https://finance.omniva.eu/finance/erp/"}],"details":[{"id":1,"arve":"TP                  ","nimetus":"RAHANDUSAMET                                                                                                                                                                                                                                                  ","default_":1,"kassa":2,"pank":1,"konto":"","tp":"18510101","kassapank":2,"userid":"70"},{"id":2,"arve":"EE051010562011276005","nimetus":"SEB                                                                                                                                                                                                                                                           ","default_":1,"kassa":1,"pank":401,"konto":"10010002","tp":"800401","kassapank":1,"userid":"70"},{"id":3,"arve":"kassa               ","nimetus":"Kassa                                                                                                                                                                                                                                                         ","default_":1,"kassa":0,"pank":1,"konto":"100000","tp":"18510101","kassapank":0,"userid":"70"}],"gridConfig":[{"id":"id","name":"id","width":"0px","show":false,"type":"text","readOnly":true},{"id":"arve","name":"Arve","width":"100px","show":true,"type":"text","readOnly":false},{"id":"nimetus","name":"Nimetus","width":"300px","show":true,"readOnly":true},{"id":"konto","name":"Konto","width":"100px","show":true,"type":"text","readOnly":false},{"id":"tp","name":"TP","width":"100px","show":true,"type":"text","readOnly":false}],"default.json":[{"id":75,"number":"","rekvid":63,"toolbar1":0,"toolbar2":0,"toolbar3":0,"tahtpaev":14,"keel":2,"port":"465","smtp":"smtp.gmail.com","user":"vladislav.gordin@gmail.com","pass":"Vlad490710A","email":"vladislav.gordin@gmail.com","earved":"https://finance.omniva.eu/finance/erp/"}],"gridData":[{"id":"NEW0.352711495575625","arve":"EE712200221023241719","nimetus":"test arve","konto":"10010009","tp":"","kassapank":"1"},{"id":1,"arve":"TP                  ","nimetus":"RAHANDUSAMET                                                                                                                                                                                                                                                  ","default_":1,"kassa":2,"pank":1,"konto":"","tp":"18510101","kassapank":2,"userid":"70"},{"id":2,"arve":"EE051010562011276005","nimetus":"SEB                                                                                                                                                                                                                                                           ","default_":1,"kassa":1,"pank":401,"konto":"10010002","tp":"800401","kassapank":1,"userid":"70"},{"id":3,"arve":"kassa               ","nimetus":"Kassa                                                                                                                                                                                                                                                         ","default_":1,"kassa":0,"pank":1,"konto":"100000","tp":"18510101","kassapank":0,"userid":"70"}],"bpm":[],"requiredFields":[{"name":"regkood","type":"C"},{"name":"nimetus","type":"C"}]}}', 70, 63);

@@ -10,6 +10,8 @@ const StartMenu = require('./../components/start-menu/start-menu.jsx'),
     AdminRegister = require('./../docs/admin/index.jsx'),
     UseridRegister = require('./../docs/userid/index.jsx'),
     UserDocument = require('./../docs/userid/document/index.jsx'),
+    RekvRegister = require('./../docs/rekv/index.jsx'),
+    RekvDocument = require('./../docs/rekv/document/index.jsx'),
     TaotlusLoginRegister = require('./../docs/taotlus_login/index.jsx'),
     TaotlusLoginDocument = require('./../docs/taotlus_login/document/index.jsx');
 
@@ -49,12 +51,21 @@ class App extends React.Component {
                 />
                 <Route exact path="/admin/userid"
                        render={(props) => <UseridRegister history={props.history}
-                                                                initData={this.props.initData}
-                                                                module={MODULE}/>}/>
+                                                          initData={this.props.initData}
+                                                          module={MODULE}/>}/>
                 <Route exact path="/admin/userid/:docId"
                        render={(props) => <UserDocument  {...props}
-                                                                 module={MODULE}
-                                                                 history={props.history}/>}
+                                                         module={MODULE}
+                                                         history={props.history}/>}
+                />
+                <Route exact path="/admin/rekv"
+                       render={(props) => <RekvRegister history={props.history}
+                                                        initData={this.props.initData}
+                                                        module={MODULE}/>}/>
+                <Route exact path="/admin/rekv/:docId"
+                       render={(props) => <RekvDocument  {...props}
+                                                         module={MODULE}
+                                                         history={props.history}/>}
                 />
 
             </StyleRoot>)

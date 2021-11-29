@@ -103,7 +103,8 @@ module.exports = {
                            u.ametnik::VARCHAR(254),
                            u.is_admin::INTEGER,
                            u.is_kasutaja::INTEGER
-                    FROM ou.cur_userid u`,     //  $1 всегда ид учреждения $2 - всегда ид пользователя
+                    FROM ou.cur_userid u
+                    where u.rekvid = $1`,     //  $1 всегда ид учреждения $2 - всегда ид пользователя
         params: '',
         alias: 'curUserid'
     },

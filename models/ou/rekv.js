@@ -36,7 +36,7 @@ module.exports = {
                       FROM ou.aa
                       WHERE parentid = $1
                         AND kassa = 2
-                          LIMIT 1)::VARCHAR(20)                                       AS oma_tp
+                      LIMIT 1)::VARCHAR(20)                                           AS oma_tp
 
               FROM ou.rekv r,
                    ou.userid u
@@ -148,11 +148,10 @@ module.exports = {
             {id: "nimetus", name: "Nimetus", width: "35%"}
         ],
         sqlString: `SELECT $2 AS user_id,
+                           $1 AS rekv_id,
                            r.*
                     FROM cur_rekv r
-                    WHERE r.status <> 3
-                      AND r.id IN (SELECT rekv_id
-                                   FROM get_asutuse_struktuur($1::INTEGER))`,     //  $1 всегда ид учреждения $2 - всегда ид пользователя
+                    WHERE r.status <> 3`,     //  $1 всегда ид учреждения $2 - всегда ид пользователя
         params: '',
         alias: 'curRekv'
     },
