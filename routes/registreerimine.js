@@ -42,13 +42,10 @@ exports.post = async function (req, res, next) {
         data: {data}
     };
 
-    console.log(JSON.stringify(params));
-
 // salvestan
     const Doc = require('./../classes/DocumentTemplate');
     const Document = new Doc('TAOTLUS_LOGIN'.toLowerCase(), 0, null, null, 'ku');
     const savedData = await Document.save(params);
-    console.log('savedData', savedData);
 
     if (!savedData.error_code && savedData.error_code > 0) {
         throw new Error('Salvestamine ebaõnnestus', savedData.error_message);

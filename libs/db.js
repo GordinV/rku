@@ -48,6 +48,7 @@ const db = {
         let sqlString;
         try {
             await Promise.all(sqls.map(async sql => {
+
                 sqlString = typeof sql === 'string' ? sql : sql.sql;
                 let data = await client.query(sqlString, params);
                 // запишем итог в объект, который вернем как результат

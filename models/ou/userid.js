@@ -51,7 +51,8 @@ module.exports = {
             query: null,
             multiple: true,
             alias: 'com_user_rekv',
-            data: []
+            data: [],
+            not_initial_load: true
         },
         {
             sql: `SELECT r.nimetus AS asutus, u.*, $2 AS rekvid
@@ -65,7 +66,8 @@ module.exports = {
             query: null,
             multiple: true,
             alias: 'get_all_users',
-            data: []
+            data: [],
+            not_initial_load: true
         },
         {
             sql: `SELECT *
@@ -77,10 +79,29 @@ module.exports = {
             not_initial_load: true
 
         },
+        {
+            sql: `SELECT au.id, a.id AS asutus_id, a.regkood, a.nimetus, a.aadress, $2 AS user_id_
+                  FROM libs.asutus a
+                           INNER JOIN libs.asutus_user_id au ON a.id = au.asutus_id
+                  WHERE au.user_id = $1
+            `, //$1 - id, $2 - user_id
+            query: null,
+            multiple: true,
+            alias: 'details',
+            data: []
+        },
+
     ],
     returnData: {
         row: {},
-        details: []
+        details: [],
+        gridConfig: [
+            {id: 'id', name: 'id', width: '0px', show: false, type: 'text', readOnly: true},
+            {id: 'regkood', name: 'Reg.kood/ Isikukood', width: '20%', show: true, type: 'text', readOnly: false},
+            {id: 'nimetus', name: 'Nimetus', width: '40%', show: true, readOnly: true},
+            {id: 'aadress', name: 'Aadress', width: '50%', show: true, type: 'text', readOnly: false},
+        ]
+
     },
     requiredFields: [
         {name: 'regkood', type: 'C'},
@@ -104,7 +125,7 @@ module.exports = {
                            u.is_admin::INTEGER,
                            u.is_kasutaja::INTEGER
                     FROM ou.cur_userid u
-                    where u.rekvid = $1`,     //  $1 всегда ид учреждения $2 - всегда ид пользователя
+                    WHERE u.rekvid = $1`,     //  $1 всегда ид учреждения $2 - всегда ид пользователя
         params: '',
         alias: 'curUserid'
     },

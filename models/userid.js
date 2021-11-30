@@ -167,7 +167,7 @@ module.exports = {
             }
             const sql = _.findWhere(useridModel.select, {alias: 'get_all_users'}).sql;
 
-            db.query(sql, [userId], function (err, result) {
+            db.query(sql, [userId, 0], function (err, result) {
                 if (err) {
                     console.error(err);
                     return callback(err);

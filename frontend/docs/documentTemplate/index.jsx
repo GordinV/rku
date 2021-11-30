@@ -287,20 +287,9 @@ class DocumentTemplate extends React.Component {
                 // сохраним в контексте последние изменения
                 DocContext[this.props.docTypeId] = this.docData.id;
 
-                //если было создание нового докмента и этот док был карта ребенка, то сделаем переадрессацию на добавление услуг
-                let docTypeId = this.props.docTypeId,
-                    docId = this.docData.id;
-
                 // обновим справочник
-                if (DocContext.libs[this.props.docTypeId.toLowerCase()]) {
+                if (DocContext.libs && DocContext.libs[this.props.docTypeId.toLowerCase()]) {
                     this.loadLibs(this.props.docTypeId.toLowerCase());
-                }
-
-
-                if (docTypeId.toUpperCase() === 'LAPS' && this.props.docId === 0) {
-                    // делаем редайрект на карту услуг
-                    docTypeId = 'LAPSE_KAART';
-                    docId = 0;
                 }
 
                 // если есть в кеше , то читим
@@ -310,10 +299,12 @@ class DocumentTemplate extends React.Component {
                     DocContext.libs[lib] = []
                 }
 
+
                 if (this.props.reload) {
                     // reload / redirect
                     setTimeout(() => {
-                        const current = `/${this.props.module ? this.props.module : DocContext.module}/${docTypeId}/${docId}`;
+
+                        const current = `/${this.props.module ? this.props.module : DocContext.module}/${this.props.docTypeId}/${this.docData.id}`;
                         this.props.history.replace(`/reload`);
                         setTimeout(() => {
                             this.props.history.replace(current);
@@ -321,7 +312,6 @@ class DocumentTemplate extends React.Component {
 
                     }, 2000);
                 }
-
             });
 
         });

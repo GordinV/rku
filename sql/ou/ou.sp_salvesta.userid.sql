@@ -31,23 +31,14 @@ DECLARE
 
     roles_json   JSONB   = (SELECT to_jsonb(row)
                             FROM (SELECT coalesce((doc_data ->> 'is_kasutaja') :: BOOLEAN, FALSE)    AS is_kasutaja,
-                                         coalesce((doc_data ->> 'is_peakasutaja') :: BOOLEAN, FALSE) AS is_peakasutaja,
                                          coalesce((doc_data ->> 'is_admin') :: BOOLEAN, FALSE)       AS is_admin,
-                                         coalesce((doc_data ->> 'is_asutuste_korraldaja') :: BOOLEAN,
-                                                  FALSE)                                             AS is_asutuste_korraldaja,
-                                         coalesce((doc_data ->> 'is_ladu_kasutaja') :: BOOLEAN,
-                                                  FALSE)                                             AS is_ladu_kasutaja,
-                                         coalesce((doc_data ->> 'is_arvestaja') :: BOOLEAN,
-                                                  FALSE)                                             AS is_arvestaja,
-                                         coalesce((doc_data ->> 'is_palga_kasutaja') :: BOOLEAN,
-                                                  FALSE)                                             AS is_palga_kasutaja,
-                                         coalesce((doc_data ->> 'is_pohivara_kasutaja') :: BOOLEAN,
-                                                  FALSE)                                             AS is_pohivara_kasutaja
+                                         coalesce((doc_data ->> 'is_raama') :: BOOLEAN,
+                                                  FALSE)                                             AS is_raama,
+                                         coalesce((doc_data ->> 'is_juht') :: BOOLEAN,
+                                                  FALSE)                                             AS is_juht
                                  ) row);
 
     is_import    BOOLEAN = data ->> 'import';
-    roles_list   TEXT    = 'dbvaatleja';
-    l_string     TEXT;
 BEGIN
 
     RAISE NOTICE 'start';

@@ -21,4 +21,18 @@ module.exports = {
                 border: '1px solid brown'
         */
     },
+    grid: {
+        mainTable: {
+            width: '100%'
+        },
+        headerTable: {
+            width:'100%',
+        },
+
+        gridContainer: {
+            width: '100%'
+        }
+
+    },
+
 };

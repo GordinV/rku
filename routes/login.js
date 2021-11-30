@@ -130,6 +130,8 @@ exports.post = function (req, res, next) {
                  role = user.roles.is_admin ? 'admin': role;
                  role = user.roles.is_juht ? 'juht': role;
 
+                 console.log('role', role, user.roles)
+
                 switch(role) {
                     case 'kasutaja':
                         DocContext.pageName = 'Kasutaja'

@@ -53,15 +53,9 @@ BEGIN
                  ltrim(rtrim(v_user.ametnik)) AS user) row;
 
     UPDATE ou.userid
-    SET status  = array_position((enum_range(NULL :: DOK_STATUS)), 'deleted'),
+    SET status  = 3,
         ajalugu = new_history
     WHERE id = doc_id;
-
-    IF NOT exists(SELECT id FROM ou.userid WHERE kasutaja = v_doc.kasutaja AND status = 1)
-    THEN
-        -- drop system account
-        EXECUTE 'DROP USER IF EXISTS "' || v_doc.kasutaja || '"';
-    END IF;
 
     result = 1;
     RETURN;
@@ -79,7 +73,7 @@ $BODY$
     VOLATILE
     COST 100;
 
-GRANT EXECUTE ON FUNCTION ou.sp_delete_userid(INTEGER, INTEGER) TO dbadmin;
+GRANT EXECUTE ON FUNCTION ou.sp_delete_userid(INTEGER, INTEGER) TO db;
 
 /*
 select error_code, result, error_message from ou.sp_delete_userid(4837, 4995)

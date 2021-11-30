@@ -7,6 +7,15 @@ const DocumentTemplate = require('./../../documentTemplate/index.jsx'),
     TextArea = require('../../../components/text-area/text-area.jsx'),
     CheckBox = require('../../../components/input-checkbox/input-checkbox.jsx'),
     styles = require('./styles');
+const DataGrid = require('../../../components/data-grid/data-grid.jsx');
+const getTextValue = require('./../../../../libs/getTextValue');
+const Loading = require('./../../../components/loading/index.jsx');
+
+
+const DocContext = require('./../../../doc-context.js');
+const DocRights = require('./../../../../config/doc_rights');
+const checkRights = require('./../../../../libs/checkRights');
+
 
 /**
  * Класс реализует документ справочника признаков.
@@ -24,12 +33,16 @@ class User extends React.PureComponent {
 
     render() {
         return (
+
             <DocumentTemplate docId={this.state.docId}
                               ref='document'
                               docTypeId='USERID'
                               module={this.props.module}
                               initData={this.props.initData}
                               renderer={this.renderer}
+                              userData={this.props.userData}
+                              history={this.props.history}
+                              focusElement={'input-kasutaja'}
             />
         )
     }
@@ -40,138 +53,93 @@ class User extends React.PureComponent {
      * @returns {*}
      */
     renderer(self) {
-        if (!self.docData) {
-            return null;
+        if (!self || !self.docData || !self.docData.kasutaja) {
+            return (<div style={styles.doc}>
+                <Loading label={'Laadimine...'}/>
+            </div>);
         }
+        // вычислим права на редактирование
+        let userRoles = DocContext.userData ? DocContext.userData.roles : [];
+        let docRightsUserid = DocRights['USERID'] ? DocRights['USERID'] : [];
+        let kas_admin = checkRights(userRoles, docRightsUserid, 'edit');
+
         return (
             <div style={styles.doc}>
                 <div style={styles.docRow}>
                     <div style={styles.docColumn}>
-                        <InputText title="Kasutaja tunnus:  "
+                        <InputText title="Kasutaja tunnus:"
                                    name='kasutaja'
                                    ref="input-kasutaja"
-                                   readOnly={true}
+                                   readOnly={!kas_admin}
                                    value={self.docData.kasutaja || ''}
                                    onChange={self.handleInputChange}/>
-                        <InputText title="Nimi: "
+                        <InputText title="Nimi:"
                                    name='ametnik'
                                    ref="input-ametnik"
                                    readOnly={!self.state.edited}
                                    value={self.docData.ametnik || ''}
                                    onChange={self.handleInputChange}/>
-                        <InputText title="Email: "
-                                   name='email'
-                                   ref="input-email"
-                                   readOnly={!self.state.edited}
-                                   value={self.docData.email || ''}
-                                   onChange={self.handleInputChange}/>
-                        <InputText title="Smtp: "
-                                   name='smtp'
-                                   ref="input-smtp"
-                                   readOnly={!self.state.edited}
-                                   value={self.docData.smtp || ''}
-                                   onChange={self.handleInputChange}/>
-                        <InputText title="Port: "
-                                   name='port'
-                                   ref="input-port"
-                                   readOnly={!self.state.edited}
-                                   value={self.docData.port || ''}
-                                   onChange={self.handleInputChange}/>
-                        <InputText title="Email kasutaja: "
-                                   name='user'
-                                   ref="input-user"
-                                   readOnly={!self.state.edited}
-                                   value={self.docData.user || ''}
-                                   onChange={self.handleInputChange}/>
-                        <InputText title="Email parool: "
-                                   name='pass'
-                                   ref="input-pass"
-                                   readOnly={!self.state.edited}
-                                   value={self.docData.pass || ''}
-                                   onChange={self.handleInputChange}/>
-                        <CheckBox title="Kas raamatupidaja?"
+                        {Boolean(self.docData.is_raama) || Boolean(self.docData.is_juht) || Boolean(self.docData.is_admin) ?
+                            <div>
+                                <InputText title="Email:"
+                                           name='email'
+                                           ref="input-email"
+                                           readOnly={!self.state.edited}
+                                           value={self.docData.email || ''}
+                                           onChange={self.handleInputChange}/>
+                                < InputText title="Smtp:"
+                                            name='smtp'
+                                            ref="input-smtp"
+                                            readOnly={!self.state.edited}
+                                            value={self.docData.smtp || ''}
+                                            onChange={self.handleInputChange}/>
+                                <InputText title="Port:"
+                                           name='port'
+                                           ref="input-port"
+                                           readOnly={!self.state.edited}
+                                           value={self.docData.port || ''}
+                                           onChange={self.handleInputChange}/>
+                                <InputText title="Email kasutaja:"
+                                           name='user'
+                                           ref="input-user"
+                                           readOnly={!self.state.edited}
+                                           value={self.docData.user || ''}
+                                           onChange={self.handleInputChange}/>
+                                <InputText title="Email parool:"
+                                           name='pass'
+                                           ref="input-pass"
+                                           readOnly={!self.state.edited}
+                                           value={self.docData.pass || ''}
+                                           onChange={self.handleInputChange}/>
+                            </div>
+                            : null}
+                        <CheckBox title="Kas kasutaja"
                                   name='is_kasutaja'
                                   value={Boolean(self.docData.is_kasutaja)}
                                   ref={'checkbox_is_kasutaja'}
                                   onChange={self.handleInputChange}
-                                  readOnly={true}
+                                  readOnly={!kas_admin}
                         />
-                        <CheckBox title="Kas peakasutaja?"
-                                  name='is_peakasutaja'
-                                  value={Boolean(self.docData.is_peakasutaja)}
-                                  ref={'checkbox_is_peakasutaja'}
+                        <CheckBox title="Kas juhataja"
+                                  name='is_juht'
+                                  value={Boolean(self.docData.is_juht)}
+                                  ref={'checkbox_is_juht'}
                                   onChange={self.handleInputChange}
-                                  readOnly={true}
+                                  readOnly={!kas_admin}
                         />
-                        <CheckBox title="Kas administraator?"
+                        <CheckBox title="Kas administraator"
                                   name='is_admin'
                                   value={Boolean(self.docData.is_admin)}
                                   ref={'checkbox_is_admin'}
                                   onChange={self.handleInputChange}
-                                  readOnly={true}
+                                  readOnly={!kas_admin}
                         />
-                        <CheckBox title="Kas vaatleja?"
-                                  name='is_vaatleja'
-                                  value={Boolean(self.docData.is_vaatleja)}
-                                  ref={'checkbox_is_vaatleja'}
+                        <CheckBox title="Kas raamatupidaja"
+                                  name='is_raama'
+                                  value={Boolean(self.docData.is_raama)}
+                                  ref={'checkbox_is_raama'}
                                   onChange={self.handleInputChange}
-                                  readOnly={true}
-                        />
-                        <CheckBox title="Kas laste arvestaja?"
-                                  name='is_arvestaja'
-                                  value={Boolean(self.docData.is_arvestaja)}
-                                  ref={'checkbox_is_arvestaja'}
-                                  onChange={self.handleInputChange}
-                                  readOnly={true}
-                        />
-                        <CheckBox title="Kas eelarve taotluse koostaja?"
-                                  name='is_eel_koostaja'
-                                  value={Boolean(self.docData.is_eel_koostaja)}
-                                  ref={'checkbox_is_eel_koostaja'}
-                                  onChange={self.handleInputChange}
-                                  readOnly={true}
-                        />
-                        <CheckBox title="Kas eelarve taotluse allkriastaja?"
-                                  name='is_eel_allkirjastaja'
-                                  value={Boolean(self.docData.is_eel_allkirjastaja)}
-                                  ref={'checkbox_is_eel_allkirjastaja'}
-                                  onChange={self.handleInputChange}
-                                  readOnly={true}
-                        />
-                        <CheckBox title="Kas eelarve taotluse esitaja?"
-                                  name='is_eel_esitaja'
-                                  value={Boolean(self.docData.is_eel_esitaja)}
-                                  ref={'checkbox_is_eel_esitaja'}
-                                  onChange={self.handleInputChange}
-                                  readOnly={true}
-                        />
-                        <CheckBox title="Kas asutuste korraldaja?"
-                                  name='is_asutuste_korraldaja'
-                                  value={Boolean(self.docData.is_asutuste_korraldaja)}
-                                  ref={'checkbox_is_asutuste_korraldaja'}
-                                  onChange={self.handleInputChange}
-                                  readOnly={true}
-                        />
-                        <CheckBox title="Kas rekl.maksu administraator?"
-                                  name='is_rekl_administrator'
-                                  value={Boolean(self.docData.is_rekl_administrator)}
-                                  ref={'checkbox_is_rekl_administrator'}
-                                  onChange={self.handleInputChange}
-                                  readOnly={true}
-                        />
-                        <CheckBox title="Kas rekl.maksu haldur?"
-                                  name='is_rekl_maksuhaldur'
-                                  value={Boolean(self.docData.is_rekl_maksuhaldur)}
-                                  ref={'checkbox_is_rekl_maksuhaldur'}
-                                  onChange={self.handleInputChange}
-                                  readOnly={true}
-                        />
-                        <CheckBox title="Kas ladu kasutaja?"
-                                  name='is_ladu_kasutaja'
-                                  value={Boolean(self.docData.is_ladu_kasutaja)}
-                                  ref={'checkbox_is_ladu_kasutaja'}
-                                  onChange={self.handleInputChange}
-                                  readOnly={true}
+                                  readOnly={!kas_admin}
                         />
                     </div>
                 </div>
@@ -184,6 +152,29 @@ class User extends React.PureComponent {
                               value={self.docData.muud || ''}
                               readOnly={!self.state.edited}/>
                 </div>
+                <br/>
+                {self.docData.gridData.length > 0 ?
+                    <div>
+                        <div style={styles.docRow}>
+                            <label ref="label">
+                                {getTextValue('Klient')}
+                            </label>
+                        </div>
+                        < div style={styles.docRow}>
+                            < DataGrid source='details'
+                                       gridData={self.docData.gridData}
+                                       gridColumns={self.docData.gridConfig}
+                                       showToolBar={false}
+                                       handleGridBtnClick={self.handleGridBtnClick}
+                                       docTypeId={'asutus'}
+                                       readOnly={true}
+                                       style={styles.grid.headerTable}
+                                       ref="asutus-data-grid"/>
+                        </div>
+                    </div>
+                    : null}
+
+
             </div>
         );
     }

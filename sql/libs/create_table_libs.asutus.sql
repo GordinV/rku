@@ -25,6 +25,8 @@ CREATE TABLE libs.asutus
         OIDS=FALSE
     );
 
+alter table libs.asutus add COLUMN if not exists ajalugu jsonb;
+
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE libs.asutus TO db;
 GRANT INSERT, SELECT, UPDATE, DELETE, REFERENCES, TRIGGER ON TABLE libs.asutus TO db;
 

@@ -111,7 +111,7 @@ BEGIN
 
         INSERT INTO ou.rekv (parentid, regkood, nimetus, kbmkood, aadress, haldus, tel, faks, email, juht, raama, muud,
                              ajalugu, status, properties)
-        VALUES (doc_parentid, doc_regkood, doc_nimetus, doc_kbmkood, doc_aadress, doc_haldus, doc_tel, doc_faks,
+        VALUES (coalesce(doc_parentid,0), doc_regkood, doc_nimetus, doc_kbmkood, doc_aadress, doc_haldus, doc_tel, doc_faks,
                 doc_email,
                 doc_juht, doc_raama, doc_muud, new_history,
                 1, json_object) RETURNING id
@@ -131,7 +131,8 @@ BEGIN
                ltrim(rtrim(kasutaja)) :: TEXT AS kasutaja,
                ltrim(rtrim(ametnik)) :: TEXT  AS ametnik,
                properties,
-               muud
+               muud,
+               user_roles as roles
         INTO v_user
         FROM ou.userid
         WHERE id = user_id;
@@ -143,12 +144,15 @@ BEGIN
                      v_user    AS data) row;
 
         new_user_id = ou.sp_salvesta_userid(user_json, user_id, rekv_id);
-        raise notice 'new_user_id %', new_user_id;
+
 
         IF new_user_id IS NULL OR new_user_id = 0
         THEN
             RAISE EXCEPTION 'Uue kasutaja salvestamine eba õnnestus';
         END IF;
+
+        update ou.userid set roles = roles:: jsonb || '{"is_admin": true}'::jsonb where id = new_user_id;
+
     ELSE
 
         SELECT row_to_json(row)
