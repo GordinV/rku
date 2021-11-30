@@ -153,7 +153,7 @@ class User extends React.PureComponent {
                               readOnly={!self.state.edited}/>
                 </div>
                 <br/>
-                {self.docData.gridData.length > 0 ?
+                {self.docData.gridData && self.docData.gridData.length > 0 ?
                     <div>
                         <div style={styles.docRow}>
                             <label ref="label">

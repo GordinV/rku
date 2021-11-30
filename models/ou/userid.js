@@ -28,7 +28,7 @@ module.exports = {
                       $2 :: INTEGER         AS userid,
                       'USERID'             AS doc_type_id,
                       0 :: INTEGER      AS rekvid,
-                      '' :: VARCHAR(20)  AS kasutaja,
+                      ' ' :: VARCHAR(20)  AS kasutaja,
                       '' :: VARCHAR(254) AS ametnik,
                       '' :: TEXT         AS muud,
                       0 :: INTEGER     AS is_kasutaja,
