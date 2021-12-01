@@ -28,7 +28,8 @@ module.exports = {
     },
     modalPageContent: {
         padding: '10px',
-        margin: '10px'
+        margin: '10px',
+        width:'auto'
     },
     header: {
         height: '30px',

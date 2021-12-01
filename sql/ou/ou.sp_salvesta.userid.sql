@@ -11,8 +11,8 @@ DECLARE
     userName     TEXT;
     doc_id       INTEGER = data ->> 'id';
     doc_data     JSON    = data ->> 'data';
-    doc_kasutaja TEXT    = doc_data ->> 'kasutaja';
-    doc_parool   TEXT    = doc_data ->> 'parool';
+    doc_kasutaja TEXT    = ltrim(rtrim(doc_data ->> 'kasutaja'));
+    doc_parool   TEXT    = ltrim(rtrim(doc_data ->> 'parool'));
     doc_ametnik  TEXT    = doc_data ->> 'ametnik';
     doc_muud     TEXT    = doc_data ->> 'muud';
 

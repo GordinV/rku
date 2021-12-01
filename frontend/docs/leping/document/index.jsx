@@ -229,7 +229,7 @@ class Leping extends React.PureComponent {
                         </div>
                     ) : null}
                     <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
+                        <div style={styles.contant}>
                             <Select title="Teenus"
                                     name='nomid'
                                     libs="nomenclature"
@@ -238,12 +238,13 @@ class Leping extends React.PureComponent {
                                     value={row.nomid}
                                     collId='id'
                                     ref='nomid'
+                                    style={styles.select}
                                     placeholder='Teenuse kood'
                                     onChange={self.handleGridRowChange}/>
                         </div>
                     </div>
                     <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
+                        <div style={styles.contant}>
                             <InputNumber title='Kogus '
                                          name='kogus'
                                          value={Number(row.kogus ? row.kogus : 0)}
@@ -256,7 +257,7 @@ class Leping extends React.PureComponent {
                         </div>
                     </div>
                     <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
+                        <div style={styles.contant}>
                             <InputNumber title='Hind '
                                          name='hind'
                                          value={Number(row.hind ? row.hind : 0)}
@@ -288,6 +289,15 @@ class Leping extends React.PureComponent {
             if (doc.gridRowData && !doc.gridRowData['nomid']) warning = warning + ' Код операции';
             if (!doc.gridRowData['kogus']) warning = warning + ' Количество';
             if (!doc.gridRowData['hind']) warning = warning + ' Сумма';
+
+            // наименование услуги и код
+            if (doc.gridRowData && doc.gridRowData['nomid']) {
+                let teenus = DocContext.libs['nomenclature'].filter(row => row.id == doc.gridRowData['nomid']);
+                if (teenus) {
+                    doc.gridRowData['kood'] = teenus[0].kood ? teenus[0].kood : null;
+                    doc.gridRowData['nimetus'] = teenus[0].nimetus ? teenus[0].nimetus : null;
+                }
+            }
 
         }
         return warning;

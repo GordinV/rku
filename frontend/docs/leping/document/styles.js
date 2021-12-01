@@ -53,6 +53,9 @@ module.exports = {
 
     btnEdit: {
         width: 'min-content'
+    },
+    contant : {
+        width: 'auto'
     }
 
 };

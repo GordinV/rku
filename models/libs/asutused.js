@@ -46,7 +46,7 @@ module.exports = {
                     AND r.id IN (SELECT rekvid FROM ou.userid WHERE id = $2)`, //$1 - doc_id, $2 0 userId
             query: null,
             multiple: true,
-            alias: 'details',
+            alias: 'asutus_user',
             data: []
         },
         {
@@ -73,7 +73,7 @@ module.exports = {
                   WHERE a.id = $1`, //$1 - doc_id, $2 0 userId
             query: null,
             multiple: true,
-            alias: 'asutus_aa',
+            alias: 'details',
             data: []
 
         },
@@ -94,7 +94,8 @@ module.exports = {
         row: {},
         details: [],
         objects: [],
-        gridConfig:
+        asutus_user:[],
+        gridAsutusUserConfig:
             [
                 {id: 'id', name: 'id', width: '0px', show: false, type: 'text', readOnly: true},
                 {id: 'kasutaja', name: 'Kasutaja tunnus', width: '30%', show: true, type: 'text', readOnly: false},
@@ -106,6 +107,11 @@ module.exports = {
                 {id: 'id', name: 'id', width: '0px', show: false, type: 'text', readOnly: true},
                 {id: 'aadress', name: 'Aadress', width: '100%', show: true, type: 'text', readOnly: false},
             ],
+        gridConfig:
+            [
+                {id: 'aa', name: 'Arveldusarve', width: '300px', show: true, type: 'text', readOnly: false},
+            ],
+
 
     },
     requiredFields: [

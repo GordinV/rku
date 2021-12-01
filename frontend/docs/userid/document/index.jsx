@@ -67,7 +67,7 @@ class User extends React.PureComponent {
             <div style={styles.doc}>
                 <div style={styles.docRow}>
                     <div style={styles.docColumn}>
-                        <InputText title="Kasutaja tunnus:"
+                        <InputText title="Kasutaja tunnus"
                                    name='kasutaja'
                                    ref="input-kasutaja"
                                    readOnly={!kas_admin}

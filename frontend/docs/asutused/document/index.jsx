@@ -8,9 +8,11 @@ const
     DocumentTemplate = require('./../../documentTemplate/index.jsx'),
     InputText = require('../../../components/input-text/input-text.jsx'),
     TextArea = require('../../../components/text-area/text-area.jsx'),
+    ModalPage = require('../../../components/modalpage/modalPage.jsx'),
     styles = require('./asutused.styles');
 const DataGrid = require('../../../components/data-grid/data-grid.jsx');
 const Loading = require('./../../../components/loading/index.jsx');
+const getTextValue = require('./../../../../libs/getTextValue');
 
 
 class Asutused extends React.PureComponent {
@@ -20,8 +22,11 @@ class Asutused extends React.PureComponent {
             docId: props.docId ? props.docId : Number(props.match.params.docId),
             loadedData: false
         };
+        this.createGridRow = this.createGridRow.bind(this);
 
         this.renderer = this.renderer.bind(this);
+        this.handleGridRow = this.handleGridRow.bind(this);
+        this.gridValidateFields = this.gridValidateFields.bind(this);
     }
 
     render() {
@@ -32,6 +37,8 @@ class Asutused extends React.PureComponent {
                                  docTypeId='ASUTUSED'
                                  initData={this.props.initData}
                                  renderer={this.renderer}
+                                 createGridRow={this.createGridRow}
+                                 gridValidator={this.gridValidateFields}
                                  focusElement={'input-regkood'}
 
         />
@@ -48,8 +55,10 @@ class Asutused extends React.PureComponent {
 
         let isEditeMode = self.state.edited;
 
-        const gridUserData = self.docData.gridData,
-            gridUserColumns = self.docData.gridConfig,
+        const gridUserData = self.docData.asutus_user,
+            gridUserColumns = self.docData.gridAsutusUserConfig,
+            gridAaData = self.docData.gridData,
+            gridAaColumns = self.docData.gridConfig,
             gridObjectsData = self.docData.objects,
             gridObjectsColumns = self.docData.gridObjectsConfig;
 
@@ -57,13 +66,13 @@ class Asutused extends React.PureComponent {
             <div style={styles.doc}>
                 <div style={styles.docRow}>
                     <div style={styles.docColumn}>
-                        <InputText title="Reg.kood "
+                        <InputText title="Reg.kood/ Isikukood"
                                    name='regkood'
                                    ref="input-regkood"
                                    readOnly={!isEditeMode}
                                    value={self.docData.regkood || ''}
                                    onChange={self.handleInputChange}/>
-                        <InputText title="Nimetus "
+                        <InputText title="Nimetus"
                                    name='nimetus'
                                    ref="input-nimetus"
                                    readOnly={!isEditeMode}
@@ -75,12 +84,37 @@ class Asutused extends React.PureComponent {
                                    readOnly={!isEditeMode}
                                    value={self.docData.omvorm || ''}
                                    onChange={self.handleInputChange}/>
-                        <InputText title="Arveldus arve:"
-                                   name='aa'
-                                   ref="input-aa"
+                        <InputText title="Telefon"
+                                   name='tel'
+                                   ref="input-tel"
+                                   value={self.docData.tel || ''}
                                    readOnly={!isEditeMode}
-                                   value={self.docData.aa || ''}
                                    onChange={self.handleInputChange}/>
+                        <InputText title="Email"
+                                   name='email'
+                                   ref="input-email"
+                                   value={self.docData.email || ''}
+                                   readOnly={!isEditeMode}
+                                   onChange={self.handleInputChange}/>
+                        <label ref="label">
+                            {getTextValue('Arvelduste arved')}
+                        </label>
+                        <div style={styles.docRow}>
+                            <DataGrid source='asutus_aa'
+                                      gridData={gridAaData}
+                                      gridColumns={gridAaColumns}
+                                      showToolBar={isEditeMode}
+                                      readOnly={!isEditeMode}
+                                      style={styles.grid.headerTable}
+                                      handleGridRow={self.handleGridRow}
+                                      handleGridBtnClick={self.handleGridBtnClick}
+                                      ref="asutus_aa-data-grid"/>
+                        </div>
+                        {self.state.gridRowEdit ?
+                            this.createGridRow(self)
+                            : null}
+
+
                     </div>
                 </div>
                 <div style={styles.docRow}>
@@ -100,22 +134,6 @@ class Asutused extends React.PureComponent {
                               readOnly={!isEditeMode}/>
                 </div>
                 <div style={styles.docRow}>
-                    <InputText title="Telefon"
-                               name='tel'
-                               ref="input-tel"
-                               value={self.docData.tel || ''}
-                               readOnly={!isEditeMode}
-                               onChange={self.handleInputChange}/>
-                </div>
-                <div style={styles.docRow}>
-                    <InputText title="Email"
-                               name='email'
-                               ref="input-email"
-                               value={self.docData.email || ''}
-                               readOnly={!isEditeMode}
-                               onChange={self.handleInputChange}/>
-                </div>
-                <div style={styles.docRow}>
                     <TextArea title="Muud"
                               name='muud'
                               ref="textarea-muud"
@@ -133,7 +151,7 @@ class Asutused extends React.PureComponent {
                 </div>
                 <div style={styles.docRow}>
                     <label ref="label">
-                        {'Kasutaja objektid'}
+                        {getTextValue('Kasutaja objektid')}
                     </label>
                 </div>
                 <div style={styles.docRow}>
@@ -149,7 +167,7 @@ class Asutused extends React.PureComponent {
                 </div>
                 <div style={styles.docRow}>
                     <label ref="label">
-                        {'Kasutaja andmed'}
+                        {getTextValue('Kasutaja andmed')}
                     </label>
                 </div>
                 <div style={styles.docRow}>
@@ -169,6 +187,74 @@ class Asutused extends React.PureComponent {
 
         );
     }
+
+    /**
+     * формирует объекты модального окна редактирования строки грида
+     * @returns {XML}
+     */
+    createGridRow(self) {
+        let row = self.gridRowData ? self.gridRowData : {},
+            validateMessage = '', // self.state.warning
+            buttonOkReadOnly = validateMessage.length > 0 || !self.state.checked,
+            modalObjects = ['btnOk', 'btnCancel'];
+
+        if (buttonOkReadOnly) {
+            // уберем кнопку Ок
+            modalObjects.splice(0, 1);
+        }
+
+        if (!row) return <div/>;
+
+        return (<div className='.modalPage'>
+                <ModalPage
+                    modalObjects={modalObjects}
+                    ref="modalpage-grid-row"
+                    show={true}
+                    modalPageBtnClick={self.modalPageClick}
+                    modalPageName='Rea lisamine / parandamine'>
+                    <div ref="grid-row-container">
+                        <div style={styles.docRow}>
+                            <InputText title='Arveldus arve: '
+                                       name='aa'
+                                       value={row.aa || ''}
+                                       bindData={false}
+                                       ref='aa'
+                                       onChange={self.handleGridRowInput}/>
+                        </div>
+                    </div>
+                    <div><span>{validateMessage}</span></div>
+                </ModalPage>
+            </
+                div>
+        )
+            ;
+    }
+
+    /**
+     * валидатор для строки грида
+     * @returns {string}
+     */
+    gridValidateFields() {
+        let warning = '';
+        let doc = this.refs['document'];
+        if (doc && doc.gridRowData) {
+
+            // только после проверки формы на валидность
+            if (doc.gridRowData && !doc.gridRowData['aa']) warning = warning + ' Расчетный счет';
+
+        }
+        return warning;
+
+    }
+
+    /**
+     *  управление модальным окном
+     * @param gridEvent
+     */
+    handleGridRow(gridEvent) {
+        this.setState({gridRowEdit: true, gridRowEvent: gridEvent});
+    }
+
 
 }
 

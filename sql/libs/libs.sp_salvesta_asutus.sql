@@ -29,7 +29,7 @@ DECLARE
     doc_KEHTIVUS   DATE    = doc_data ->> 'kehtivus';
     is_import      BOOLEAN = data ->> 'import';
     doc_is_tootaja BOOLEAN = coalesce((doc_data ->> 'is_tootaja') :: BOOLEAN, FALSE);
-    doc_asutus_aa  JSONB   = coalesce((doc_data ->> 'asutus_aa') :: JSONB, '[]':: JSONB);
+    doc_asutus_aa  JSONB   = '[]'::jsonb || coalesce((doc_data ->> 'asutus_aa') :: JSONB, coalesce(doc_data ->> 'gridData', doc_data ->> 'griddata'):: JSONB);
     doc_aa         TEXT    = doc_data ->> 'aa';
     doc_palk_email TEXT    = doc_data ->> 'palk_email';
     new_properties JSONB;
