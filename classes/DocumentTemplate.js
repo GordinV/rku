@@ -90,6 +90,7 @@ class Document {
             sql = this.config.saveDoc;
         }
 
+console.log(sql, JSON.stringify(params));
         let data = await db.queryDb(sql, [params.data, params.userId, params.asutusId]);
 
         if (data && data.error_code) {
@@ -114,6 +115,8 @@ class Document {
         if (!sql) {
             return {error: 'No task found'}
         }
+
+        console.log('sql', sql, _params)
         return await db.queryDb(sql, _params);
     }
 
@@ -142,7 +145,6 @@ class Document {
 
 
         }
-
         return await db.queryDb(sql, params, sortBy, sqlWhere, limit, subTotals);
     }
 

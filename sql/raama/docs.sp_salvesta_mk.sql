@@ -89,8 +89,8 @@ BEGIN
         LIMIT 1;
         IF NOT found
         THEN
-            RAISE NOTICE 'pank not found %', doc_aa_id;
-            RETURN 0;
+            RAISE EXCEPTION 'pank not found %', doc_aa_id;
+--            RETURN 0;
         END IF;
     END IF;
 
@@ -180,7 +180,7 @@ BEGIN
             FROM json_to_record(
                          json_object) AS x(id TEXT, asutusid INTEGER, nomid INTEGER, summa NUMERIC(14, 4), aa TEXT,
                                            pank TEXT,
-                                           tunnus TEXT, proj TEXT, konto TEXT );
+                                           tunnus TEXT, proj TEXT, konto TEXT);
 
             IF json_record.id IS NULL OR json_record.id = '0' OR substring(json_record.id FROM 1 FOR 3) = 'NEW' OR
                NOT exists(SELECT id
@@ -191,7 +191,7 @@ BEGIN
                 INSERT INTO docs.mk1 (parentid, asutusid, nomid, summa, aa, pank, tunnus, proj, konto)
                 VALUES (mk_id, json_record.asutusid, json_record.nomid, json_record.summa, json_record.aa,
                         json_record.pank,
-                        json_record.tunnus, json_record.proj, json_record.konto) RETURNING id  INTO mk1_id;
+                        json_record.tunnus, json_record.proj, json_record.konto) RETURNING id INTO mk1_id;
 
                 -- add new id into array of ids
                 ids = array_append(ids, mk1_id);

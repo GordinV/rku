@@ -19,6 +19,8 @@ CREATE TABLE ou.aa
 
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE ou.aa TO db;
 
+GRANT ALL ON SEQUENCE ou.aa_id_seq TO db;
+
 -- Index: public.aa_parentid
 
 DROP INDEX if exists aa_parentid;

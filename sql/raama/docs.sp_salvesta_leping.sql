@@ -170,4 +170,8 @@ GRANT EXECUTE ON FUNCTION docs.sp_salvesta_leping(JSON, INTEGER, INTEGER) TO db;
 /*
 select docs.sp_salvesta_leping('{"id":297260,"data": {"asutusid":1,"bpm":null,"created":"10.08.2018 11:08:13","doc":"Lepingud","doc_status":0,"doc_type_id":"LEPING","dok":null,"doklausid":null,"id":297260,"kpv":"2018-08-10","lastupdate":"10.08.2018 11:08:13","number":"001","objektid":null,"pakettid":null,"rekvid":1,"selgitus":"test 123","status":"????????","tahtaeg":"2018-08-10","userid":1,"gridData":[{"hind":100,"id":4,"kbm":0,"kogus":1,"kood":"TEENUS18","nimetus":"Teenuse selgitus   18%","nomid":2,"soodus":0,"soodusalg":"        ","sooduslopp":"        ","status":1,"summa":100,"userid":1}]}}'
 , 1, 1);
+
+
+
+
 */

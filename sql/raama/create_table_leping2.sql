@@ -16,6 +16,8 @@ CREATE TABLE docs.leping2
 );
 
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE docs.leping2 TO db;
+GRANT ALL ON SEQUENCE docs.leping2_id_seq TO db;
+
 
 DROP INDEX if exists leping2_nomid;
 

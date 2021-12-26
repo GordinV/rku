@@ -588,6 +588,7 @@ class DocumentTemplate extends React.Component {
      */
     renderDocToolBar() {
         const toolbar = this.prepareParamsForToolbar();
+        console.log('toolbar',toolbar)
         return (
             <ToolbarContainer ref='toolbarContainer'>
                 <DocToolBar ref='doc-toolbar'

@@ -11,6 +11,7 @@ const DocumentTemplate = require('./../../documentTemplate/index.jsx'),
     Loading = require('./../../../components/loading/index.jsx');
 
 const styles = require('./styles');
+const DocContext = require('./../../../doc-context');
 
 /**
  * Класс реализует документ справочника признаков.
@@ -185,7 +186,7 @@ class Tunnus extends React.PureComponent {
         let docMkId = this.refs['document'].docData.doc_id;
 
         // осуществит переход на карточку контр-агента
-        this.props.history.push(`/lapsed/smk/${docMkId}`);
+        this.props.history.push(`/${this.props.module ? this.props.module : DocContext.module}/smk/${docMkId}`);
     }
 
 

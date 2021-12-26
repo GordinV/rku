@@ -30,7 +30,9 @@ const StartMenu = require('./../components/start-menu/start-menu.jsx'),
     KaiveAruanne = require('./../docs/kaive_aruanne/index.jsx'),
     LepingRegister = require('./../docs/leping/index.jsx'),
     MooduDocument = require('../docs/moodu/document/index.jsx'),
-    MooduRegister = require('./../docs/moodu/index.jsx');
+    MooduRegister = require('./../docs/moodu/index.jsx'),
+    RekvRegister = require('./../docs/rekv/index.jsx'),
+    RekvDocument = require('./../docs/rekv/document/index.jsx');
 
 const {Route} = require('react-router-dom');
 const {StyleRoot} = require('radium');
@@ -136,6 +138,16 @@ class App extends React.Component {
                        render={(props) => <KaiveAruanne history={props.history}
                                                         module={MODULE}
                                                         initData={this.props.initData}/>}/>
+                <Route exact path="/raama/rekv"
+                       render={(props) => <RekvRegister history={props.history}
+                                                        initData={this.props.initData}
+                                                        module={MODULE}/>}/>
+                <Route exact path="/raama/rekv/:docId"
+                       render={(props) => <RekvDocument  {...props}
+                                                         module={MODULE}
+                                                         history={props.history}/>}
+                />
+
             </StyleRoot>)
     }
 

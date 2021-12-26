@@ -23,7 +23,7 @@ CREATE TABLE docs.arv (
     tasudok   CHARACTER(254),
     muud      TEXT,
     jaak      NUMERIC(12, 4) NOT NULL DEFAULT 0,
-    objektid  INTEGER        NOT NULL DEFAULT 0,
+    objektid  INTEGER,
     objekt    CHARACTER VARYING(20),
     parentId  INTEGER,
     properties JSONB,
@@ -57,3 +57,5 @@ ALTER TABLE docs.arv
         REFERENCES docs.doc (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE;
+
+ALTER TABLE docs.arv ALTER COLUMN objektid drop  not null;

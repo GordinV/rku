@@ -9,33 +9,24 @@ CREATE OR REPLACE FUNCTION docs.loe_makse(IN user_id INTEGER, IN l_id INTEGER,
     RETURNS RECORD AS
 $BODY$
 DECLARE
-    l_mk_id          INTEGER;
-    v_arv            RECORD;
-    json_object      JSONB;
-    v_pank_vv        RECORD;
-    l_rekvid         INTEGER;
-    l_error          TEXT; -- извещение о том, что пошло не так
-    l_count          INTEGER        = 0;
-    l_count_kokku    INTEGER        = 0;
-    l_makse_summa    NUMERIC(12, 2) = 0;
-    l_tasu_jaak      NUMERIC(12, 2) = 0;
-    l_db_konto       TEXT           = '100100'; -- дебетовая (банк) сторона
-    l_dokprop_id     INTEGER;
-    l_target_user_id INTEGER        = user_id;
-    l_user_kood      TEXT           = (SELECT kasutaja
-                                       FROM ou.userid
-                                       WHERE id = user_id
-                                       LIMIT 1);
-    l_maksja_id      INTEGER;
-    l_laps_id        INTEGER;
-    v_vanem          RECORD;
-    l_vanem          INTEGER;
-    l_new_viitenr    TEXT;
-    l_mk_number      TEXT;
-    l_message        TEXT;
-    l_error_code     INTEGER        = 0;
-    l_viitenr        TEXT;
-    l_kas_vigane     BOOLEAN        = TRUE;
+    l_mk_id       INTEGER;
+    v_arv         RECORD;
+    json_object   JSONB;
+    v_pank_vv     RECORD;
+    l_rekvid      INTEGER;
+    l_error       TEXT; -- извещение о том, что пошло не так
+    l_count       INTEGER        = 0;
+    l_count_kokku INTEGER        = 0;
+    l_makse_summa NUMERIC(12, 2) = 0;
+    l_tasu_jaak   NUMERIC(12, 2) = 0;
+    l_db_konto    TEXT           = '100100'; -- дебетовая (банк) сторона
+    l_dokprop_id  INTEGER;
+    l_maksja_id   INTEGER;
+    l_mk_number   TEXT;
+    l_message     TEXT;
+    l_error_code  INTEGER        = 0;
+    l_viitenr     TEXT;
+    l_kas_vigane  BOOLEAN        = TRUE;
 BEGIN
     -- ищем платежи
     FOR v_pank_vv IN
@@ -134,7 +125,7 @@ BEGIN
                     -- создаем платежку
                     SELECT fnc.result, fnc.error_message
                     INTO l_mk_id, l_error
-                    FROM docs.create_new_mk(l_target_user_id, json_object) fnc;
+                    FROM docs.create_new_mk(user_id, json_object) fnc;
 
                     -- проверим на соответствие платильщика
                     IF upper(v_arv.maksja)::TEXT <> upper(v_pank_vv.maksja)::TEXT
@@ -155,7 +146,7 @@ BEGIN
                         l_tasu_jaak = l_tasu_jaak - l_makse_summa;
 
                         -- lausend
-                        PERFORM docs.gen_lausend_smk(l_mk_id, l_target_user_id);
+                        PERFORM docs.gen_lausend_smk(l_mk_id, user_id);
                     END IF;
 
                     IF (l_tasu_jaak <= 0)
@@ -168,7 +159,6 @@ BEGIN
                 END LOOP;
             IF (l_tasu_jaak > 0)
             THEN
-                raise notice 'create new mk l_tasu_jaak %',l_tasu_jaak;
                 -- оплата не списана
                 -- создаем поручение с суммой равной остатку, без привязки к счету
 
@@ -190,9 +180,7 @@ BEGIN
 
                 SELECT fnc.result, fnc.error_message
                 INTO l_mk_id, l_error
-                FROM docs.create_new_mk(l_target_user_id, json_object) fnc;
-
-                raise notice 'mk created %', l_mk_id;
+                FROM docs.create_new_mk(user_id, json_object) fnc;
 
                 -- сохраняем пулученную информаци.
                 UPDATE docs.pank_vv v
@@ -206,11 +194,13 @@ BEGIN
                     l_tasu_jaak = 0;
 
                     -- lausend
-                    PERFORM docs.gen_lausend_smk(l_mk_id, l_target_user_id);
+                    PERFORM docs.gen_lausend_smk(l_mk_id, user_id);
                     -- log
                     l_message = l_message || ', koostatud ettemaks';
                     l_count_kokku = l_count_kokku + 1;
                     l_kas_vigane = FALSE;
+                ELSE
+                    RAISE EXCEPTION 'MK ei ole koostatud';
                 END IF;
 
             END IF;
@@ -279,7 +269,7 @@ GRANT EXECUTE ON FUNCTION docs.loe_makse(IN user_id INTEGER, IN INTEGER) TO db;
 
 /*
 
-SELECT docs.loe_makse(4,1)
+SELECT docs.loe_makse(21,5)
 
 
 */

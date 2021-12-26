@@ -111,7 +111,8 @@ BEGIN
 
         INSERT INTO ou.rekv (parentid, regkood, nimetus, kbmkood, aadress, haldus, tel, faks, email, juht, raama, muud,
                              ajalugu, status, properties)
-        VALUES (coalesce(doc_parentid,0), doc_regkood, doc_nimetus, doc_kbmkood, doc_aadress, doc_haldus, doc_tel, doc_faks,
+        VALUES (coalesce(doc_parentid, 0), doc_regkood, doc_nimetus, doc_kbmkood, doc_aadress, doc_haldus, doc_tel,
+                doc_faks,
                 doc_email,
                 doc_juht, doc_raama, doc_muud, new_history,
                 1, json_object) RETURNING id
@@ -132,7 +133,7 @@ BEGIN
                ltrim(rtrim(ametnik)) :: TEXT  AS ametnik,
                properties,
                muud,
-               user_roles as roles
+               user_roles                     AS roles
         INTO v_user
         FROM ou.userid
         WHERE id = user_id;
@@ -151,7 +152,11 @@ BEGIN
             RAISE EXCEPTION 'Uue kasutaja salvestamine eba õnnestus';
         END IF;
 
-        update ou.userid set roles = roles:: jsonb || '{"is_admin": true}'::jsonb where id = new_user_id;
+        UPDATE ou.userid
+        SET roles = roles:: JSONB || '{
+          "is_admin": true
+        }'::JSONB
+        WHERE id = new_user_id;
 
     ELSE
 
@@ -203,6 +208,16 @@ BEGIN
                                             kassa INTEGER,
                                             pank INTEGER,
                                             konto TEXT, tp TEXT, muud TEXT, kassapank INTEGER);
+
+            IF !exists(SELECT id
+                       FROM ou.aa
+                       WHERE parentid = user_rekvid
+                         AND kassa = json_record.kassapank
+                         AND default_ = 1
+                )
+            THEN
+                json_record.default_ = 1;
+            END IF;
 
             IF json_record.id IS NULL OR json_record.id = '0' OR substring(json_record.id FROM 1 FOR 3) = 'NEW'
             THEN

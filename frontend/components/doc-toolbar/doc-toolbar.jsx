@@ -50,7 +50,7 @@ class DocToolBar extends React.PureComponent {
         if (kas_add && isEditMode) {
             kas_add = false;
         }
-        let kas_edit = this.props.toolbarParams ? this.props.toolbarParams['btnAdd'].show : true;
+        let kas_edit = this.props.toolbarParams ? this.props.toolbarParams['btnEdit'].show : true;
         if (kas_edit && isEditMode) {
             kas_edit = false;
         }

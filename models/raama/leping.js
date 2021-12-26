@@ -54,7 +54,7 @@ const Leping = {
                   FROM docs.doc d
                            INNER JOIN docs.leping1 a ON a.parentId = d.id
                            INNER JOIN libs.asutus AS asutus ON asutus.id = a.asutusId
-                           INNER JOIN libs.object o ON o.id = a.objektid
+                           LEFT OUTER JOIN libs.object o ON o.id = a.objektid
                            INNER JOIN ou.userid u ON u.id = $2::INTEGER
                   WHERE d.id = $1`,
             sqlAsNew: `SELECT $1::INTEGER                                                       AS id,
@@ -190,24 +190,6 @@ const Leping = {
         {name: 'asutusid', type: 'N', min: null, max: null},
         {name: 'kogus', type: 'N', min: -9999999, max: 999999}
     ],
-    lepinguArved: {
-        command: `SELECT row_number() OVER ()                                          AS id,
-                         tulemus -> 'result'                                           AS result,
-                         tulemus -> 'error_code'                                       AS error_code,
-                         coalesce((tulemus ->> 'error_code')::INTEGER, 0)::INTEGER > 0 AS kas_vigane,
-                         tulemus -> 'error_message'                                    AS error_message
-                  FROM (SELECT '{"result": 1,"error_code":0,"error_message":""}'::JSONB AS tulemus) qry`,
-        /*
-        --                           SELECT to_jsonb(docs.ebatoenaolised_mahakandmine($2::INTEGER, id::INTEGER, $3::DATE)) tulemus
-        --                           FROM cur_arved
-        --                           WHERE id IN (
-        --                               SELECT unnest(string_to_array($1::TEXT, ','::TEXT))::INTEGER
-        --                           )) qry`, //$1 - docs ids, $2 - userId, $3 - kpv
-        */
-        type: "sql",
-        alias: 'lepinguArved'
-
-    },
     getLog: {
         command: `SELECT ROW_NUMBER() OVER ()                                                                        AS id,
                          (ajalugu ->> 'user')::VARCHAR(20)                                                           AS kasutaja,
@@ -246,6 +228,25 @@ const Leping = {
                   FROM docs.koosta_arve_lepingu_alusel($2::INTEGER, $1::INTEGER, $3::DATE)`, //$1 docId, $2 - userId
         type: 'sql',
         alias: 'koostaArve'
+    },
+    koostaArved: {
+        command: `SELECT row_number() OVER ()                                          AS id,
+                         tulemus -> 'result'                                           AS result,
+                         tulemus -> 'error_code'                                       AS error_code,
+                         coalesce((tulemus ->> 'error_code')::INTEGER, 0)::INTEGER > 0 AS kas_vigane,
+                         tulemus -> 'error_message'                                    AS error_message,
+                         tulemus ->> 'viitenr'                                         AS viitenr
+                  FROM (
+                           SELECT to_jsonb(
+                                          docs.koosta_arve_lepingu_alusel($2::INTEGER, parentid::INTEGER,
+                                                                          $3::DATE)) tulemus
+                           FROM docs.leping1 l1
+                           WHERE parentid IN (
+                               SELECT unnest(string_to_array($1::TEXT, ','::TEXT))::INTEGER
+                           )
+                       ) qry`, //$1 docId, $2 - userId
+        type: 'sql',
+        alias: 'koostaArved'
     },
 
 };

@@ -81,7 +81,7 @@ class Documents extends React.PureComponent {
                 warningType: 'notValid',
             });
         } else {
-            Doc.fetchData(`calc/lepinguArved`, {docs: ids, seisuga: seisuga}).then((data) => {
+            Doc.fetchData(`calc/koostaArved`, {docs: ids, seisuga: seisuga}).then((data) => {
                 if (data.result) {
                     message = `task saadetud täitmisele`;
                     Doc.setState({warning: `${message}`, warningType: 'ok'});

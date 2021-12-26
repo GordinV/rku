@@ -19,10 +19,6 @@ DECLARE
                                WHERE id = user_id
                                LIMIT 1);
 
-    l_asutus_id     INTEGER = (SELECT asutusid
-                               FROM docs.leping1 l1
-                                        INNER JOIN libs.asutus a ON a.id = l1.asutusid
-                               WHERE l1.parentid = l_leping_id);
     l_doklausend_id INTEGER;
     l_liik          INTEGER = 0;
     json_object     JSONB;
@@ -53,14 +49,6 @@ DECLARE
 
 BEGIN
 
-    IF l_asutus_id IS NULL
-    THEN
-        -- контр-анет не найден, выходим
-        result = 0;
-        error_message = 'Puudub kontragent';
-        error_code = 1;
-        RETURN;
-    END IF;
     -- ищем ид конфигурации контировки
 
     l_doklausend_id = (SELECT dp.id
@@ -82,13 +70,14 @@ BEGIN
     -- 3. период
     -- 4. услуги из списка табеля
 
-    SELECT l1.objektid, l1.number
+    SELECT l1.objektid, l1.number, l1.asutusid
     INTO v_objekt
     FROM docs.leping1 l1
     WHERE l1.parentid = l_leping_id
     LIMIT 1;
 
     -- читаем договора и создаем детали счета
+
     FOR v_leping IN
         SELECT l1.number,
                l2.nomid,
@@ -123,6 +112,7 @@ BEGIN
         ) moodu ON moodu.lepingid = l1.parentid
         WHERE d.id = l_leping_id
         LOOP
+
             -- формируем строку
             json_arvrea = '[]'::JSONB || (SELECT row_to_json(row)
                                           FROM (SELECT v_leping.nomid                                         AS nomid,
@@ -155,12 +145,12 @@ BEGIN
                                 l_liik                                        AS liik,
                                 l_kpv                                         AS kpv,
                                 l_kpv + 15                                    AS tahtaeg,
-                                l_asutus_id                                   AS asutusid,
                                 l_aa                                          AS aa,
                                 'Arve, lepingu number ' || v_objekt.number || ' alusel ' ||
                                 date_part('month', l_kpv)::TEXT || '/' ||
                                 date_part('year', l_kpv)::TEXT || ' kuu eest' AS lisa,
-                                v_objekt.objektid,
+                                coalesce(v_objekt.objektid,0),
+                                v_objekt.asutusid,
                                 json_arvread                                  AS "gridData") row);
 
 
@@ -174,62 +164,53 @@ BEGIN
 
 
         -- check for arve summa
-/*    IF l_arve_summa < 0
-    THEN
-        result = 0;
-        error_message = 'Dokumendi summa = 0';
-        error_code = 1;
-        RETURN;
-    ELSE
-*/
+        IF l_arve_summa = 0
+        THEN
+            result = 0;
+            error_message = 'Dokumendi summa = 0';
+            error_code = 1;
+            RETURN;
+        END IF;
 
-        IF l_arve_summa <> 0
+        IF l_arve_summa > 0
         THEN
             SELECT docs.sp_salvesta_arv(json_object :: JSON, user_id, l_rekvid) INTO l_arv_id;
-
         END IF;
-    ELSE
-        l_arv_id = NULL;
-        result = 0;
-        error_code = 1;
-        error_message = 'Kehtiv teenused ei leidnud';
-        RETURN;
-    END IF;
 
+        -- проверка
 
-    -- проверка
-
-    IF l_arv_id IS NOT NULL AND l_arv_id > 0
-    THEN
-        -- меняем статус измерений, добавляем ссылку
-        UPDATE docs.doc
-        SET status   = 2,
-            docs_ids = array_append(docs_ids, l_arv_id)
-        WHERE id IN (
-            SELECT unnest(l_moodu_ids)
-        );
-
-        -- добавляем ссылку на измерения в счет
-        UPDATE docs.doc
-        SET docs_ids = docs_ids || l_moodu_ids
-        WHERE id = l_arv_id;
-
-
-/*        IF l_arve_summa > 0
+        IF l_arv_id IS NOT NULL AND l_arv_id > 0
         THEN
-            -- контируем
-            PERFORM docs.gen_lausend_arv(l_arv_id, user_id);
+            -- меняем статус измерений, добавляем ссылку
+            UPDATE docs.doc
+            SET status   = 2,
+                docs_ids = array_append(docs_ids, l_arv_id)
+            WHERE id IN (
+                SELECT unnest(l_moodu_ids)
+            );
+
+            -- добавляем ссылку на измерения в счет
+            UPDATE docs.doc
+            SET docs_ids = docs_ids || l_moodu_ids
+            WHERE id = l_arv_id;
+
+
+            IF l_arve_summa > 0
+            THEN
+                -- контируем
+                PERFORM docs.gen_lausend_arv(l_arv_id, user_id);
+            END IF;
+
+            error_message = 'Leping, arveId:' ||
+                            coalesce(l_arv_id, 0)::TEXT;
+
+            result = l_arv_id;
+        ELSE
+            error_code = 1;
+            error_message =
+                    'Dokumendi koostamise viga';
+
         END IF;
-*/
-        error_message = 'Leping, arveId:' ||
-                        coalesce(l_arv_id, 0)::TEXT;
-
-        result = l_arv_id;
-    ELSE
-        error_code = 1;
-        error_message =
-                'Dokumendi koostamise viga';
-
     END IF;
     RETURN;
 

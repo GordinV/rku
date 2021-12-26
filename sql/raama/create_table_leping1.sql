@@ -17,6 +17,7 @@ CREATE TABLE docs.leping1 (
 );
 
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE docs.leping1 TO db;
+GRANT ALL ON SEQUENCE docs.leping1_id_seq TO db;
 
 
 DROP INDEX IF EXISTS leping1_parentid;
@@ -61,6 +62,6 @@ GRANT SELECT ON TABLE cur_lepingud TO db;
 
 GRANT ALL ON SEQUENCE docs.leping1_id_seq TO db;
 
-create UNIQUE INDEX leping1_parentid_idx
-on docs.leping1 USING btree (parentid);
+CREATE UNIQUE INDEX leping1_parentid_idx
+    ON docs.leping1 USING btree (parentid);
 
