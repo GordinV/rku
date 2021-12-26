@@ -19,6 +19,8 @@ const StartMenu = require('./../components/start-menu/start-menu.jsx'),
     ArveDocument = require('../docs/arv/document/index.jsx'),
     SorderRegister = require('./../docs/sorder/index.jsx'),
     SorderDocument = require('../docs/sorder/document/index.jsx'),
+    PankVvRegister = require('./../docs/pank_vv/index.jsx'),
+    PankVvDocument = require('../docs/pank_vv/document/index.jsx'),
     VorderRegister = require('./../docs/vorder/index.jsx'),
     VorderDocument = require('../docs/vorder/document/index.jsx'),
     SmkRegister = require('./../docs/smk/index.jsx'),
@@ -96,6 +98,14 @@ class App extends React.Component {
                        render={(props) => <SmkRegister history={props.history}
                                                        initData={this.props.initData}
                                                        module={MODULE}/>}/>
+                <Route exact path="/raama/pank_vv/:docId" component={PankVvDocument}/>
+                <Route exact path="/raama/pank_vv"
+                       render={(props) => <PankVvRegister
+                           module={MODULE}
+                           history={props.history}
+                           initData={this.props.initData}/>}/>
+
+
                 <Route exact path="/raama/vmk/:docId"
                        component={VmkDocument}
                        module={MODULE}/>

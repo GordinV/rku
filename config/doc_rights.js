@@ -36,7 +36,7 @@ module.exports = {
         add: ['kasutaja', 'peakasutaja','raama'],
         edit: ['kasutaja', 'peakasutaja','raama'],
         delete: ['kasutaja', 'peakasutaja','raama'],
-        import: ['admin']
+        import: ['admin','raama']
     },
     PANK_VV: {
         edit: ['kasutaja', 'peakasutaja'],

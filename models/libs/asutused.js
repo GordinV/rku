@@ -62,7 +62,6 @@ module.exports = {
             alias: 'objects',
             data: []
         },
-
         {
             sql: `SELECT (e.element ->> 'aa') :: VARCHAR(20) AS aa,
                          $2 :: INTEGER                       AS userid
@@ -94,7 +93,7 @@ module.exports = {
         row: {},
         details: [],
         objects: [],
-        asutus_user:[],
+        asutus_user: [],
         gridAsutusUserConfig:
             [
                 {id: 'id', name: 'id', width: '0px', show: false, type: 'text', readOnly: true},

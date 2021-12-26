@@ -23,5 +23,6 @@ module.exports = {
     rekl:'/juht/rekl',
     userid:'/ou/userid',
     kaive_aruanne:'/raama/kaive_aruanne',
-    rekv: '/ou/rekv'
+    rekv: '/ou/rekv',
+    pank_vv:'/raama/pank_vv',
 };

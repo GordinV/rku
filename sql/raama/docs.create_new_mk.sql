@@ -33,6 +33,7 @@ DECLARE
                                    FROM ou.userid
                                    WHERE id = user_id);
     l_nom_id     INTEGER;
+    l_kr         TEXT           = '1220';
 BEGIN
 
 
@@ -180,7 +181,7 @@ BEGIN
                l_asutus_id AS asutusid,
                l_summa     AS summa,
                l_aa        AS aa,
-               '103000'    AS konto
+               l_kr        AS konto
         INTO v_mk1;
     END IF;
 
@@ -208,6 +209,10 @@ BEGIN
 
 
     SELECT docs.sp_salvesta_mk(json_object :: JSON, user_id, l_rekvId) INTO mk_id;
+    if mk_id is not null and mk_id > 0 then
+        result = mk_id;
+        error_code = 0;
+    END IF;
 
     RETURN;
 EXCEPTION

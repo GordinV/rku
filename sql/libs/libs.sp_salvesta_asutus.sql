@@ -29,7 +29,8 @@ DECLARE
     doc_KEHTIVUS   DATE    = doc_data ->> 'kehtivus';
     is_import      BOOLEAN = data ->> 'import';
     doc_is_tootaja BOOLEAN = coalesce((doc_data ->> 'is_tootaja') :: BOOLEAN, FALSE);
-    doc_asutus_aa  JSONB   = '[]'::jsonb || coalesce((doc_data ->> 'asutus_aa') :: JSONB, coalesce(doc_data ->> 'gridData', doc_data ->> 'griddata'):: JSONB);
+    doc_asutus_aa  JSONB   = '[]'::JSONB || coalesce(coalesce(doc_data ->> 'gridData', doc_data ->> 'griddata'):: JSONB,
+                                                     (doc_data ->> 'asutus_aa') :: JSONB);
     doc_aa         TEXT    = doc_data ->> 'aa';
     doc_palk_email TEXT    = doc_data ->> 'palk_email';
     new_properties JSONB;
@@ -55,26 +56,13 @@ BEGIN
         doc_id = doc_data ->> 'id';
     END IF;
 
-    IF (doc_aa IS NOT NULL)
-    THEN
-        -- если задан упрощенный расч. счет, то пишем его (для модуля дети)
-
-        SELECT row_to_json(row)
-        INTO new_aa
-        FROM (SELECT doc_aa AS aa, '' AS pank) row;
-
-    END IF;
-
-
     SELECT row_to_json(row)
     INTO new_properties
     FROM (SELECT doc_kehtivus                                                              AS kehtivus,
                  doc_pank                                                                  AS pank,
                  CASE WHEN doc_id IS NULL OR doc_id = 0 THEN FALSE ELSE doc_is_tootaja END AS is_tootaja,
                  doc_palk_email                                                            AS palk_email,
-                 CASE
-                     WHEN doc_aa IS NOT NULL THEN '[]'::JSONB || new_aa :: JSONB
-                     ELSE doc_asutus_aa :: JSONB END                                       AS asutus_aa,
+                 doc_asutus_aa :: JSONB                                                    AS asutus_aa,
                  doc_kmkr                                                                  AS kmkr) row;
 
     -- вставка или апдейт docs.doc

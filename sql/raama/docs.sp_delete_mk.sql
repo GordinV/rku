@@ -123,9 +123,9 @@ BEGIN
     WHERE doc_tasu_id = v_doc.id;
 
 
-/*    -- удаляем ссылку на данные из выписки
-    UPDATE lapsed.pank_vv SET doc_id = NULL WHERE pank_vv.doc_id = v_doc.id;
-*/
+    -- удаляем ссылку на данные из выписки
+    UPDATE docs.pank_vv SET doc_id = NULL WHERE pank_vv.doc_id = v_doc.id;
+
     -- удаляем возврат маловероятных , если есть
 /*    IF (v_doc.ebatoenaolised_tagastamine_id IS NOT NULL)
     THEN

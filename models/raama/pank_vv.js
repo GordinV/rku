@@ -19,7 +19,7 @@ module.exports = {
                      pank_vv.iban,
                      pank_vv.pank,
                      mk.number
-              FROM lapsed.pank_vv pank_vv
+              FROM docs.pank_vv pank_vv
                        LEFT OUTER JOIN docs.mk mk ON mk.parentid = pank_vv.doc_id
               WHERE pank_vv.id = $1::INTEGER`,
         sqlAsNew: `SELECT
@@ -36,7 +36,7 @@ module.exports = {
 
 
     requiredFields: [],
-    saveDoc: `SELECT lapsed.muuda_pank_vv($1::JSONB, $2::INTEGER, $3::INTEGER) as id`, // $1 - data json, $2 - userid, $3 - rekvid
+    saveDoc: `SELECT docs.muuda_pank_vv($1::JSONB, $2::INTEGER, $3::INTEGER) as id`, // $1 - data json, $2 - userid, $3 - rekvid
     deleteDoc: ``, // $1 - userId, $2 - docId
     grid: {
         gridConfiguration: [
@@ -73,38 +73,36 @@ module.exports = {
                                 ELSE 'PUUDUB' END)::TEXT                       AS asutus,
                            v.pank                                              AS pank,
                            to_char(v.timestamp, 'DD.MM.YYYY HH.MM.SSSS')::TEXT AS timestamp,
-                           $1                                                  AS not_in_use,
                            count(*) OVER ()                                    AS rows_total
-                    FROM lapsed.pank_vv v
-                             LEFT OUTER JOIN lapsed.cur_lapsed_mk mk ON mk.id = v.doc_id
+                    FROM docs.pank_vv v
+                             LEFT OUTER JOIN cur_pank mk ON mk.id = v.doc_id
                              LEFT OUTER JOIN ou.rekv r ON r.id = mk.rekvid
                              LEFT OUTER JOIN ou.userid u ON u.id = $2
+                    WHERE u.rekvid = $1
                     ORDER BY id DESC`,     //  $1 всегда ид учреждения, $2 - userId
         params: '',
         alias: 'curPankVV'
     },
     koostaMK: {
         command: `SELECT result, error_message
-                  FROM lapsed.read_pank_vv($2::INTEGER, $1::TEXT)`, //$1 - docs.doc.id, $2 - userId
+                  FROM docs.read_pank_vv($2::INTEGER, $1::TEXT)`, //$1 - docs.doc.id, $2 - userId
         type: "sql",
         alias: 'koostaMK'
     },
     loeMakse: {
         command: `SELECT result, error_message
-                  FROM lapsed.loe_makse($2::INTEGER, $1::INTEGER)`, //$1 - pank_vv.id, $2 - userId
+                  FROM docs.loe_makse($2::INTEGER, $1::INTEGER)`, //$1 - pank_vv.id, $2 - userId
         type: "sql",
         alias: 'loeMakse'
     },
     deleteDoc: `SELECT error_code, result, error_message
-                FROM lapsed.sp_delete_pank_vv($1::INTEGER, $2::INTEGER)`, // $1 - userId, $2 - docId
+                FROM docs.sp_delete_pank_vv($1::INTEGER, $2::INTEGER)`, // $1 - userId, $2 - docId
     importDoc: {
         command: `SELECT result AS id, result, stamp, error_message, data
-              FROM lapsed.sp_salvesta_pank_vv($1::JSONB, $2::INTEGER, $3::INTEGER)`, // $1 - data json, $2 - userid, $3 - rekvid
+                  FROM docs.sp_salvesta_pank_vv($1::JSONB, $2::INTEGER, $3::INTEGER)`, // $1 - data json, $2 - userid, $3 - rekvid
         type: 'sql',
         alias: 'importVV'
     }
-
-
 
 
 };
