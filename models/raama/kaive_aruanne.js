@@ -39,7 +39,6 @@ module.exports = {
         {
             view: 'kaive_aruanne_register',
             params: 'sqlWhere',
-            group: 'asutus',
             converter: function (data) {
                 let alg_saldo_kokku = 0;
                 let arvestatud_kokku = 0;

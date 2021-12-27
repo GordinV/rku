@@ -1,6 +1,4 @@
-﻿DROP FUNCTION IF EXISTS docs.sp_updatearvjaak(INTEGER, DATE);
-DROP FUNCTION IF EXISTS docs.sp_update_arv_jaak(INTEGER, DATE);
-DROP FUNCTION IF EXISTS docs.sp_update_arv_jaak(INTEGER);
+﻿DROP FUNCTION IF EXISTS docs.sp_update_arv_jaak(INTEGER);
 
 CREATE OR REPLACE FUNCTION docs.sp_update_arv_jaak(l_arv_Id INTEGER)
     RETURNS NUMERIC AS
@@ -66,7 +64,8 @@ $BODY$
 GRANT EXECUTE ON FUNCTION docs.sp_update_arv_jaak(INTEGER) TO db;
 /*
 
-SELECT docs.sp_update_arv_jaak(id, date())
+SELECT docs.sp_update_arv_jaak(parentid)
 FROM docs.arv
+where parentid = 81
 
 */

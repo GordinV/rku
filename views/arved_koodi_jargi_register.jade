@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+html(lang="et")
+
+extends report_header
+
+block content
+    meta(charset='utf-8')
+
+    style(type='text/css').
+        .grid_head {
+            background-color: lightgray;;
+        }
+
+        .doc_wrapper {
+            margin-left: 5%;
+            margin-top: 5%;
+            width: auto;
+        }
+
+        .grid_data {
+            width: 100%;
+            border: 1px solid lightgray;
+        }
+
+        .row_wrapper {
+            display: -webkit-box;
+            flexDirection: row;
+        }
+
+        .label {
+            width: 10%;
+        }
+
+        .input {
+            width: 90%;
+            margin-left: 5%;
+            font-weight: bold;
+        }
+
+        .label_subtotal {
+            width: 70%;
+        }
+
+
+    link(rel='stylesheet', href='/stylesheets/reports.css')
+    div.body_wrapper
+        h1 ARVED KOODI JÄRGI
+        each parameter in filter
+            p #{parameter.name}: #{!parameter.start ? parameter.value: parameter.start} #{parameter.start ? ` - ${parameter.end}` : null}
+        table.table.table-hover.grid_data
+            thead.grid_head
+                tr
+                    th Kuupäev
+                    th Arve number
+                    th Kood
+                    th Hind
+                    th Ühik
+                    th Kogus
+                    th Summa
+
+            tbody
+                each rea in data
+                    tr
+                        td(align='center')=rea.kpv
+                        td(align='center')=rea.number
+                        td(align='center')=rea.kood
+                        td(align='center')=rea.hind
+                        td(align='center')=rea.uhik
+                        td(align='center')=rea.kogus
+                        td(align='center')=Number(rea.summa).toFixed(2)
+            tr
+                td
+                td
+                td
+                td='Read kokku:'
+                td(align='center')=data.length
+                td='Summa kokku:'
+                td(align='center')=Number(data[0].summa_kokku).toFixed(2)
+
+

@@ -11,12 +11,14 @@ const Smk = {
                          trim(l.kood)                              AS doc_type_id,
                          k.number                                  AS number,
                          to_char(k.maksepaev, 'YYYY-MM-DD')        AS maksepaev,
+                         to_char(k.maksepaev, 'DD.MM.YYYY')::TEXT  AS maksepaev_print,
                          k.viitenr,
                          k.aaid                                    AS aa_id,
                          aa.pank                                   AS pank,
                          trim(aa.arve)::VARCHAR(20)                AS omaArve,
                          k.rekvId,
                          to_char(k.kpv, 'YYYY-MM-DD')              AS kpv,
+                         to_char(k.kpv, 'DD.MM.YYYY')::TEXT        AS kpv_print,
                          k.selg,
                          k.muud,
                          k.opt,
@@ -29,7 +31,7 @@ const Smk = {
                           WHERE parentid = k.id)                   AS summa,
                          k.doklausid,
                          (d.history -> 0 ->> 'user')::VARCHAR(120) AS koostaja,
-                         coalesce(k.jaak,0):: numeric as jaak
+                         coalesce(k.jaak, 0):: NUMERIC             AS jaak
 
                   FROM docs.doc d
                            INNER JOIN docs.mk k ON k.parentId = d.id
@@ -104,7 +106,7 @@ const Smk = {
     grid: {
         gridConfiguration: [
             {id: "id", name: "id", width: "1px", show: false},
-            {id: "kpv", name: "Kuupäev", width: "15%",  interval: true, type: 'date'},
+            {id: "kpv", name: "Kuupäev", width: "15%", interval: true, type: 'date'},
             {id: "number", name: "Number", width: "10%"},
             {id: "asutus", name: "Maksja", width: "30%"},
             {id: "aa", name: "Arveldus arve", width: "20%"},
@@ -131,7 +133,7 @@ const Smk = {
                            to_char(mk.maksepaev, 'DD.MM.YYYY') AS maksepaev
                     FROM cur_pank mk
                     WHERE mk.rekvId = $1
-                    and deebet <> 0`,     // $1 всегда ид учреждения $2 - всегда ид пользователя
+                      AND deebet <> 0`,     // $1 всегда ид учреждения $2 - всегда ид пользователя
         params: '',
         alias: 'curMk'
     },
@@ -223,6 +225,22 @@ const Smk = {
         type: "sql",
         alias: "getLogs"
     },
+    print: [
+        {
+            view: 'smk_kaart',
+            params: 'id',
+            register: `UPDATE docs.doc
+                       SET history = history ||
+                                     (SELECT row_to_json(row)
+                                      FROM (SELECT now()                                                AS print,
+                                                   (SELECT kasutaja FROM ou.userid WHERE id = $2)::TEXT AS user) row)::JSONB
+                       WHERE id = $1`
+        },
+        {
+            view: 'smk_register',
+            params: 'sqlWhere'
+        },
+    ],
 
 
 };

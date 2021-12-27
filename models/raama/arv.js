@@ -25,10 +25,12 @@ const Arv = {
                          a.liik,
                          a.operid,
                          to_char(a.kpv, 'YYYY-MM-DD')                                      AS kpv,
+                         to_char(a.kpv, 'DD.MM.YYYY')::TEXT                                AS kpv_print,
                          a.asutusid,
                          a.arvId,
                          trim(coalesce(a.lisa, '')) :: VARCHAR(120)                        AS lisa,
                          to_char(a.tahtaeg, 'YYYY-MM-DD')                                  AS tahtaeg,
+                         to_char(a.tahtaeg, 'DD.MM.YYYY')::TEXT                            AS tahtaeg_print,
                          a.kbmta,
                          a.kbm,
                          a.summa,
@@ -162,12 +164,14 @@ const Arv = {
         },
         {
             sql: `SELECT Arvtasu.id,
+                         $2                                   AS userId,
                          arvtasu.kpv,
                          arvtasu.summa,
-                         'MK' :: VARCHAR(20) AS dok,
-                         'PANK' :: VARCHAR   AS liik,
+                         'MK' :: VARCHAR(20)                  AS dok,
+                         'PANK' :: VARCHAR                    AS liik,
                          pankkassa,
-                         doc_tasu_id
+                         doc_tasu_id,
+                         coalesce(mk.number::TEXT, '0'::TEXT) AS number
                   FROM docs.arvtasu arvtasu
                            INNER JOIN docs.mk mk ON (arvtasu.doc_tasu_id = mk.parentid AND arvtasu.pankkassa = 1)
                            INNER JOIN docs.mk1 mk1 ON (mk.id = mk1.parentid)
@@ -176,13 +180,14 @@ const Arv = {
                     AND arvtasu.status <> 3
                   UNION ALL
                   SELECT Arvtasu.id,
+                         $2                                        AS userId,
                          arvtasu.kpv,
                          arvtasu.summa,
-                         'KASSAORDER' :: VARCHAR(20) AS dok,
-                         'KASSA' :: VARCHAR          AS liik,
+                         'KASSAORDER' :: VARCHAR(20)               AS dok,
+                         'KASSA' :: VARCHAR                        AS liik,
                          pankkassa,
                          doc_tasu_id,
-                         coalesce(korder1.number, 0) AS number
+                         coalesce(korder1.number::TEXT, '0'::TEXT) AS number
                   FROM docs.arvtasu arvtasu
                            INNER JOIN docs.korder1 korder1
                                       ON (arvtasu.doc_tasu_id = korder1.parentid AND arvtasu.pankkassa = 2)
@@ -191,20 +196,19 @@ const Arv = {
                     AND arvtasu.status <> 3
                   UNION ALL
                   SELECT Arvtasu.id,
+                         $2                AS userId,
                          arvtasu.kpv,
                          arvtasu.summa,
                          '' :: VARCHAR(20) AS dok,
                          'MUUD' :: VARCHAR AS liik,
                          pankkassa,
                          NULL,
-                         0                 AS number
+                         '0'::TEXT         AS number
                   FROM docs.arvtasu arvtasu
                   WHERE Arvtasu.doc_arv_id = $1
                     AND arvtasu.summa <> 0
                     AND arvtasu.status <> 3
-                    AND arvtasu.pankkassa IN (0, 4)
-
-            `,
+                    AND arvtasu.pankkassa IN (0, 4)`,
             query: null,
             multiple: true,
             alias: 'queryArvTasu',
@@ -216,7 +220,8 @@ const Arv = {
             query: null,
             multuple: false,
             alias: 'create_new_mk',
-            data: []
+            data: [],
+            not_initial_load: true
         },
         {
             sql: `SELECT result, error_code, error_message
@@ -224,13 +229,15 @@ const Arv = {
             query: null,
             multuple: false,
             alias: 'create_new_order',
-            data: []
+            data: [],
+            not_initial_load: true
         },
         {
             sql: `SELECT docs.check_arv_number($1::integer, $2::JSON)::integer as tulemus`, //$1 - rekvId, $2 - params ->'{"tyyp":1, "number":"10", "aasta": 2017, "asutus": 5155}'
             query: null,
             multuple: false,
             alias: 'validate_arve_number',
+            not_initial_load: true,
             data: []
 
         },
@@ -239,6 +246,7 @@ const Arv = {
             query: null,
             multuple: false,
             alias: 'update_bpm',
+            not_initial_load: true,
             data: []
 
         },
@@ -246,43 +254,47 @@ const Arv = {
             sql: `SELECT *
                   FROM json_to_recordset((SELECT (bpm ->> 'omniva')::JSON
                                           FROM docs.doc
-                                          WHERE id = $1)) AS x(kpv VARCHAR(40), isik VARCHAR(254), rolli VARCHAR(20))`, //$1 - docId
+                                          WHERE id = $1::INTEGER)) AS x(kpv VARCHAR(40), isik VARCHAR(254), rolli VARCHAR(20))`, //$1 - docId
             query: null,
             multuple: false,
             alias: 'get_omniva_bpm',
+            not_initial_load: true,
             data: []
         },
         {
             sql: `SELECT *
-                  FROM docs.check_arv_jaak($1, $2)`, //$1 - docId, $2 userId
+                  FROM docs.check_arv_jaak($1::INTEGER, $2::INTEGER)`, //$1 - docId, $2 userId
             query: null,
             multuple: false,
             alias: 'check_arv_jaak',
+            not_initial_load: true,
             data: []
         },
-        {
-            sql: `SELECT $1::INTEGER                                                   AS rekv_id,
-                         coalesce(error_code, 0)                                       AS error_code,
-                         result,
-                         error_message::VARCHAR(254)                                   AS error_message,
-                         CASE WHEN empty(error_code) THEN TRUE ELSE FALSE END::BOOLEAN AS kas_vigane,
-                         *
-                  FROM docs.ebatoenaolised($1, $2::DATE)`, //$1 - rekvId, $2 kpv
-            query: null,
-            multuple: false,
-            alias: 'arvesta_ebatoenaolised',
-            data: [],
-            not_initial_load: true
-        },
-        {
-            sql: `SELECT error_code, result, error_message, 'ARV' AS doc_type_id
-                  FROM docs.ebatoenaolised_mahakandmine($1::INTEGER, $2::INTEGER, $3::DATE)`, //$1 - userId, $2 - id, $3 kpv
-            query: null,
-            multuple: false,
-            alias: 'ebatoenaolised',
-            data: [],
-            not_initial_load: true
-        },
+        /*
+                {
+                    sql: `SELECT $1::INTEGER                                                   AS rekv_id,
+                                 coalesce(error_code, 0)                                       AS error_code,
+                                 result,
+                                 error_message::VARCHAR(254)                                   AS error_message,
+                                 CASE WHEN empty(error_code) THEN TRUE ELSE FALSE END::BOOLEAN AS kas_vigane,
+                                 *
+                          FROM docs.ebatoenaolised($1, $2::DATE)`, //$1 - rekvId, $2 kpv
+                    query: null,
+                    multuple: false,
+                    alias: 'arvesta_ebatoenaolised',
+                    data: [],
+                    not_initial_load: true
+                },
+                {
+                    sql: `SELECT error_code, result, error_message, 'ARV' AS doc_type_id
+                          FROM docs.ebatoenaolised_mahakandmine($1::INTEGER, $2::INTEGER, $3::DATE)`, //$1 - userId, $2 - id, $3 kpv
+                    query: null,
+                    multuple: false,
+                    alias: 'ebatoenaolised',
+                    data: [],
+                    not_initial_load: true
+                },
+        */
         {
             sql: `SELECT *
                   FROM libs.asutus
@@ -436,20 +448,60 @@ const Arv = {
         let taskFunction = eval(executeTask[0]);
         return taskFunction(docId, userId, this);
     },
+    print: [
+        {
+            view: 'arve_kaart',
+            params: 'id',
+            register: `UPDATE docs.doc
+                       SET history = history ||
+                                     (SELECT row_to_json(row)
+                                      FROM (SELECT now()                                                AS print,
+                                                   (SELECT kasutaja FROM ou.userid WHERE id = $2)::TEXT AS user) row)::JSONB
+                       WHERE id = $1`
+        },
+        {
+            view: 'arve_register',
+            params: 'sqlWhere'
+        },
+    ],
+    email: [
+        {
+            view: 'arve_email',
+            params: 'id',
+            register: `UPDATE docs.doc
+                       SET history = history ||
+                                     (SELECT row_to_json(row)
+                                      FROM (SELECT now()                                                AS email,
+                                                   (SELECT kasutaja FROM ou.userid WHERE id = $2)::TEXT AS user) row)::JSONB
+                       WHERE id = $1`
+        }
+    ],
+    earve: [
+        {
+            params: 'id',
+            register: `UPDATE docs.doc
+                       SET history = history ||
+                                     (SELECT row_to_json(row)
+                                      FROM (SELECT now()                                                AS earve,
+                                                   (SELECT kasutaja FROM ou.userid WHERE id = $2)::TEXT AS user) row)::JSONB
+                       WHERE id = $1`
+
+        }
+    ],
     getLog: {
         command: `SELECT ROW_NUMBER() OVER ()                                                                        AS id,
                          (ajalugu ->> 'user')::VARCHAR(20)                                                           AS kasutaja,
-                         coalesce(to_char((ajalugu ->> 'created')::TIMESTAMP, 'DD.MM.YYYY HH.MM.SS'),
+                         coalesce(to_char((ajalugu ->> 'created')::TIMESTAMP, 'DD.MM.YYYY HH.MI.SS'),
                                   '')::VARCHAR(20)                                                                   AS koostatud,
-                         coalesce(to_char((ajalugu ->> 'updated')::TIMESTAMP, 'DD.MM.YYYY HH.MM.SS'),
+                         coalesce(to_char((ajalugu ->> 'updated')::TIMESTAMP, 'DD.MM.YYYY HH.MI.SS'),
                                   '')::VARCHAR(20)                                                                   AS muudatud,
-                         coalesce(to_char((ajalugu ->> 'print')::TIMESTAMP, 'DD.MM.YYYY HH.MM.SS'),
+                         coalesce(to_char((ajalugu ->> 'print')::TIMESTAMP, 'DD.MM.YYYY HH.MI.SS'),
                                   '')::VARCHAR(20)                                                                   AS prinditud,
-                         coalesce(to_char((ajalugu ->> 'email')::TIMESTAMP, 'DD.MM.YYYY HH.MM.SS'), '')::VARCHAR(20) AS
+                         coalesce(to_char((ajalugu ->> 'email')::TIMESTAMP, 'DD.MM.YYYY HH.MI.SS'), '')::VARCHAR(20) AS
                                                                                                                         email,
-                         coalesce(to_char((ajalugu ->> 'earve')::TIMESTAMP, 'DD.MM.YYYY HH.MM.SS'),
+                         coalesce(to_char((ajalugu ->> 'earve')::TIMESTAMP, 'DD.MM.YYYY HH.MI.SS'),
                                   '')::VARCHAR(20)                                                                   AS earve,
-                         coalesce(to_char((ajalugu ->> 'deleted')::TIMESTAMP, 'DD.MM.YYYY HH.MM.SS'),
+                         coalesce(to_char((ajalugu ->> 'deleted')::TIMESTAMP, 'DD.MM.YYYY HH.MI.SS'),
                                   '')::VARCHAR(20)                                                                   AS kustutatud
                   FROM (
                            SELECT jsonb_array_elements(history) AS ajalugu, d.id, d.rekvid

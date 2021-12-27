@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+html(lang="et")
+style(type='text/css').
+    .grid_head {
+        background-color: lightgray;;
+    }
+    .doc_wrapper {
+        margin-left:5%;
+        margin-top:5%;
+        width:auto;
+    }
+    .grid_data {
+        width: 100%;
+        border: 1px solid lightgray;
+    }
+    .row_wrapper {
+        display:-webkit-box;
+        flexDirection: row;
+    }
+    .label {
+        width:10%;
+    }
+    .input {
+        width:90%;
+        margin-left:5%;
+        font-weight: bold;
+    }
+    .label_subtotal {
+        width:70%;
+    }
+
+    .subtotal {
+        padding-left:20%;
+        width:90%;
+        margin-left:5%;
+        font-weight: bold;
+    }
+extends report_header
+
+block content
+    link(rel='stylesheet', href='/stylesheets/reports.css')
+
+    div.body_wrapper
+        div.row_wrapper
+            p.label Raha saaja:
+            p.input #{User.asutusTais }
+        div.row_wrapper
+            p.label Maksta arvele:
+            p.input #{data[0].aa}
+
+        h1
+            p #{`${data[0].tyyp == 'ETTEMAKS' ? 'ETTEMAKSUARVE ': 'ARVE'}`}
+
+        div.row_wrapper
+            p.label Number:
+            p.input #{data[0].number}
+
+        div.row_wrapper
+            p.label Kuupäev:
+            p.input #{data[0].kpv_print}
+
+        div.row_wrapper
+            p.label Tähtaeg:
+            p.input #{data[0].tahtaeg_print}
+
+
+        div.row_wrapper
+            p.label Maksja:
+            p.input #{`${data[0].asutus.trim()} isikukood/reg.kood: ${data[0].regkood}`}
+
+        div.row_wrapper
+            p.label Aadress:
+            p.input #{`${data[0].aadress}`}
+
+        div.row_wrapper
+            p.label Lisa:
+            p.input #{`${data[0].lisa ? data[0].lisa: ''}`}
+
+        div.row_wrapper
+            p.label Märkused:
+            p.input #{`${data[0].muud ? data[0].muud : ''}`}
+        table.table.table-hover.grid_data
+            thead.grid_head
+                tr
+                    th Teenuse nimetus
+                    th Hind
+                    th Ühik
+                    th Kogus
+                    th Rea summa
+
+            tbody
+                each row in data.details
+                    tr
+                        td=row.nimetus
+                        td(align='center')=Number(row.hind,2).toFixed(2)
+                        td(align='center')=row.uhik
+                        td(align='center')=row.kogus
+                        td(align='center')=Number(row.summa).toFixed(2)
+        div.row_wrapper
+            p.label_subtotal Kokku:
+            p.subtotal #{`${Number(data[0].summa).toFixed(2)}`}
+        hr
+        div.row_wrapper
+            p.label_subtotal #{`${data[0].jaak > 0 ? 'Kuulub tasumisele': 'Teil on ettemaks'}`} :
+            p.subtotal #{`${Number(data[0].jaak).toFixed(2)}`}
+
+
