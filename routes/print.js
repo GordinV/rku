@@ -81,6 +81,7 @@ exports.get = async (req, res) => {
         }
 
         // вернуть отчет
+        console.log('data', JSON.stringify(data))
         res.render(template, {title: 'Tunnused', data: data, user: user, filter: filterData});
 
     } catch (error) {

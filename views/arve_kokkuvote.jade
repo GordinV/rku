@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+html(lang="et")
+
+extends report_header
+
+block content
+    meta(charset='utf-8')
+
+    style(type='text/css').
+        .grid_head {
+            background-color: lightgray;;
+        }
+
+        .doc_wrapper {
+            margin-left: 5%;
+            margin-top: 5%;
+            width: auto;
+        }
+
+        .grid_data {
+            width: 100%;
+            border: 1px solid lightgray;
+        }
+
+        .row_wrapper {
+            display: -webkit-box;
+            flexDirection: row;
+        }
+
+        .label {
+            width: 10%;
+        }
+
+        .input {
+            width: 90%;
+            margin-left: 5%;
+            font-weight: bold;
+        }
+
+        .label_subtotal {
+            width: 70%;
+        }
+
+
+    link(rel='stylesheet', href='/stylesheets/reports.css')
+    div.body_wrapper
+        h1 ARVE KOKKUVÕTE
+        each parameter in filter
+            p #{parameter.name}: #{!parameter.start ? parameter.value: parameter.start} #{parameter.start ? ` - ${parameter.end}` : null}
+
+        each asutus in data
+            p Asutus: #{Object.keys(asutus)[0]}
+            table.table.table-hover.grid_data
+                thead.grid_head
+                    tr
+                        th Dok. number
+                        th Kuupäev
+                        th Arvestatud
+                        th Laekumised
+                        th Dok. jääk
+
+                tbody
+                    each rea in asutus[Object.keys(asutus)[0]]
+                        tr
+                            td(align='center')=rea.number
+                            td(align='center')=rea.kpv
+                            td(align='center')=Number(rea.summa).toFixed(2)
+                            td(align='center')=Number(rea.tasutud).toFixed(2)
+                            td(align='center')=Number(rea.jaak).toFixed(2)
+                    tr
+                        td.group
+                        td.group='Kokku:'
+                        td.group(align='center')=Number(asutus[Object.keys(asutus)[0]][0].summa_kokku).toFixed(2)
+                        td.group(align='center')=Number(asutus[Object.keys(asutus)[0]][0].tasud_kokku).toFixed(2)
+                        td.group
+
+

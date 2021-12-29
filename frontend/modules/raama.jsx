@@ -29,6 +29,7 @@ const StartMenu = require('./../components/start-menu/start-menu.jsx'),
     VmkDocument = require('../docs/vmk/document/index.jsx'),
     KaiveAruanne = require('./../docs/kaive_aruanne/index.jsx'),
     ArvedKoodiJargi = require('./../docs/arved_koodi_jargi/index.jsx'),
+    ArveKokkuvote = require('./../docs/arve_kokkuvote/index.jsx'),
     LepingRegister = require('./../docs/leping/index.jsx'),
     MooduDocument = require('../docs/moodu/document/index.jsx'),
     MooduRegister = require('./../docs/moodu/index.jsx'),
@@ -141,6 +142,10 @@ class App extends React.Component {
                                                         initData={this.props.initData}/>}/>
                 <Route exact path="/raama/arved_koodi_jargi"
                        render={(props) => <ArvedKoodiJargi history={props.history}
+                                                           module={MODULE}
+                                                           initData={this.props.initData}/>}/>
+                <Route exact path="/raama/arve_kokkuvote"
+                       render={(props) => <ArveKokkuvote history={props.history}
                                                            module={MODULE}
                                                            initData={this.props.initData}/>}/>
                 <Route exact path="/raama/rekv"

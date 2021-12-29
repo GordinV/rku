@@ -24,6 +24,7 @@ module.exports = {
     userid:'/ou/userid',
     kaive_aruanne:'/raama/kaive_aruanne',
     arved_koodi_jargi:'/raama/arved_koodi_jargi',
+    arve_kokkuvote:'/raama/arve_kokkuvote',
     rekv: '/ou/rekv',
     pank_vv:'/raama/pank_vv',
 };
