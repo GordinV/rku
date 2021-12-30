@@ -256,7 +256,6 @@ class Arve extends React.PureComponent {
             modalObjects.splice(0, 1);
         }
 
-
         if (!row) return <div/>;
 
         return (<div className='.modalPage'>
@@ -265,6 +264,7 @@ class Arve extends React.PureComponent {
                 ref="modalpage-grid-row"
                 show={true}
                 modalPageBtnClick={self.modalPageClick}
+                styles={styles.gridRow}
                 modalPageName='Rea lisamine / parandamine'>
                 <div ref="grid-row-container">
                     {self.state.gridWarning.length ? (
@@ -273,23 +273,7 @@ class Arve extends React.PureComponent {
                         </div>
                     ) : null}
                     <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
-                            <Select title="Üksus:"
-                                    name='yksus'
-                                    libs="lapse_grupp"
-                                    data={self.libs['lapse_grupp']}
-                                    value={row.yksus || ''}
-                                    defaultValue={row.yksys || ''}
-                                    ref="select-lapse_grupp"
-                                    collId={'kood'}
-                                    onChange={self.handleGridRowChange}
-                                    readOnly={false}
-                            />
-                        </div>
-                    </div>
-                    <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
-                            <Select title="Teenus"
+                            <Select title="Teenus:"
                                     name='nomid'
                                     libs="nomenclature"
                                     data={self.libs['nomenclature']}
@@ -299,11 +283,9 @@ class Arve extends React.PureComponent {
                                     ref='nomid'
                                     placeholder='Teenuse kood'
                                     onChange={self.handleGridRowChange}/>
-                        </div>
                     </div>
                     <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
-                            <InputNumber title='Kogus '
+                            <InputNumber title='Kogus:'
                                          name='kogus'
                                          value={Number(row.kogus ? row.kogus : 0)}
                                          readOnly={false}
@@ -312,22 +294,9 @@ class Arve extends React.PureComponent {
                                          ref='kogus'
                                          pattern="[0-9]{10}"
                                          onChange={self.handleGridRowInput}/>
-                        </div>
                     </div>
                     <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
-                            <InputNumber title='Soodustus '
-                                         name='soodustus'
-                                         value={Number(row.soodustus ? row.soodustus : 0)}
-                                         readOnly={false}
-                                         disabled={false}
-                                         bindData={false}
-                                         ref='hind'
-                                         pattern="[0-9]{10}"
-                                         onChange={self.handleGridRowInput}/>
-                        </div>
-                        <div style={styles.docColumn}>
-                            <InputNumber title='Hind '
+                            <InputNumber title='Hind:'
                                          name='hind'
                                          value={Number(row.hind ? row.hind : 0)}
                                          readOnly={false}
@@ -336,12 +305,9 @@ class Arve extends React.PureComponent {
                                          ref='hind'
                                          pattern="[0-9]{10}"
                                          onChange={self.handleGridRowInput}/>
-                        </div>
                     </div>
                     <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
-
-                            <InputNumber title='Kbm-ta: '
+                            <InputNumber title='Kbm-ta:'
                                          name='kbmta'
                                          value={Number(row.summa ? row.summa - row.kbm : 0)}
                                          disabled={true}
@@ -349,9 +315,9 @@ class Arve extends React.PureComponent {
                                          ref='kbmta'
                                          pattern="[0-9]{10}"
                                          onChange={self.handleGridRowChange}/>
-                        </div>
-                        <div style={styles.docColumn}>
-                            <InputNumber title='Kbm: '
+                    </div>
+                    <div style={styles.docRow}>
+                            <InputNumber title='Kbm:'
                                          name='kbm'
                                          value={Number(row.kbm ? row.kbm : 0)}
                                          disabled={true}
@@ -359,12 +325,9 @@ class Arve extends React.PureComponent {
                                          ref='kbm'
                                          pattern="[0-9]{10}"
                                          onBlur={self.handleGridRowInput}/>
-                        </div>
                     </div>
                     <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
-
-                            <InputNumber title='Summa: '
+                            <InputNumber title='Summa:'
                                          name='Summa'
                                          value={Number(row.summa ? row.summa : 0)}
                                          disabled={true}
@@ -372,10 +335,8 @@ class Arve extends React.PureComponent {
                                          ref='summa'
                                          pattern="[0-9]{10}"
                                          onChange={self.handleGridRowInput}/>
-                        </div>
                     </div>
                     <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
                             <Select title="Tunnus:"
                                     name='tunnus'
                                     data={self.libs['tunnus']}
@@ -383,24 +344,18 @@ class Arve extends React.PureComponent {
                                     ref='tunnus'
                                     collId="kood"
                                     onChange={self.handleGridRowChange}/>
-
-
-                        </div>
                     </div>
                     <div style={styles.docRow}>
-                        <div style={styles.docColumn}>
-                            <Select title="Project:"
+                            <Select title="Projekt:"
                                     name='proj'
                                     data={self.libs['project']}
                                     value={row.proj || ''}
                                     ref='project'
                                     collId="kood"
                                     onChange={self.handleGridRowChange}/>
-                        </div>
-
                     </div>
                     <div style={styles.docRow}>
-                        <TextArea title="Märkused"
+                        <TextArea title="Märkused:"
                                   name='muud'
                                   ref="gridrow-textarea-muud"
                                   onChange={self.handleGridRowChange}

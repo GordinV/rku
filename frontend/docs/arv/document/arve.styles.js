@@ -40,15 +40,12 @@ module.exports = {
     },
 
     gridRow: {
-/*
-        border: '1px solid black',
-*/
         backgroundColor: 'white',
         position: 'relative',
         margin: '10% 30% 10% 30%',
-        width: 'auto',
+        width: '750px',
         opacity: '1',
-        top: '100px'
+        alignSelf: 'center'
     },
 
     btnEdit: {

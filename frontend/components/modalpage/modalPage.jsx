@@ -6,6 +6,8 @@ const React = require('react'),
     Button = require('../button-register/button-register.jsx'),
     buttonStyles = require('../button-register/button-register-styles'),
     styles = require('./modalpage-styles');
+const getTextValue = require('./../../../libs/getTextValue');
+
 
 class ModalPage extends React.PureComponent {
     constructor(props) {
@@ -70,7 +72,6 @@ class ModalPage extends React.PureComponent {
             buttonOkStyle = Object.assign({}, styles.modalPageButtons, styles.defaultButton);
 
         const Style = Object.assign({}, styles.modalPage, this.props.styles ? this.props.styles : {});
-
         return (
             <div
                 ref="container"
@@ -79,7 +80,7 @@ class ModalPage extends React.PureComponent {
             >
                 <div style={Style} ref='modalPageContainer'>
                     <div style={styles.header} ref='modalPageHeader'>
-                        <span ref='headerName' style={styles.headerName}> {this.props.modalPageName} </span>
+                        <span ref='headerName' style={styles.headerName}> {getTextValue(this.props.modalPageName)} </span>
                         <Button style={styles.buttonClose} ref="btnClose"
                                 onClick={this.changeVisibilityModalPage.bind(this)} value="x"/>
                     </div>
